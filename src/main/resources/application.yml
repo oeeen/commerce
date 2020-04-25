@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    active: default
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  datasource:
+    driverClassName: org.h2.Driver
+    password:
+    url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+
+---
+
+spring:
+  profiles: deploy
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: 11111111
+    url: jdbc:mysql://localhost:3306/commerce?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: smjeon
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true
