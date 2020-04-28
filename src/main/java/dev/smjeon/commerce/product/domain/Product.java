@@ -9,13 +9,17 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @NoArgsConstructor
 @Getter
 @Entity
 public class Product extends BaseEntity {
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id"))
     private TopCategory topCategory;
 
     @Embedded
