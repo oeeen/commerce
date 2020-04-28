@@ -1,12 +1,21 @@
 package dev.smjeon.commerce.product.domain;
 
 import dev.smjeon.commerce.product.exception.InvalidPriceException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@NoArgsConstructor
+@Getter
+@Embeddable
 public class Price {
     private static final int UPPER_BOUND = 100_000_000;
     private static final int LOWER_BOUND = 0;
 
-    private final int value;
+    @Column(nullable = false, name = "price")
+    private int value;
 
     public Price(int value) {
         validate(value);

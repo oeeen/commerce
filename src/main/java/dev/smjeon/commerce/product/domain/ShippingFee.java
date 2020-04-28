@@ -1,12 +1,21 @@
 package dev.smjeon.commerce.product.domain;
 
 import dev.smjeon.commerce.product.exception.InvalidShippingFeeException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@NoArgsConstructor
+@Getter
+@Embeddable
 public class ShippingFee {
     private static final int UPPER_BOUND = 30_000;
     private static final int LOWER_BOUND = 0;
 
-    private final int value;
+    @Column(nullable = false, name = "shipping_fee")
+    private int value;
 
     public ShippingFee(int value) {
         validate(value);
