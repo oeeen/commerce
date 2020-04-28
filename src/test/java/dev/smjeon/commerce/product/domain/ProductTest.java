@@ -22,12 +22,14 @@ public class ProductTest {
 
         Price price = new Price(10_000);
 
+        ShippingFee shippingFee = new ShippingFee(2_500);
+
         assertDoesNotThrow(() ->
                 new Product(
                         new TopCategory(topCategoryName, subCategory),
                         productName,
                         productType,
                         price,
-                        500));
+                        shippingFee));
     }
 }

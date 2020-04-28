@@ -5,13 +5,13 @@ public class Product {
     private final ProductName name;
     private final ProductType type;
     private final Price price;
-    private final int shipAmount;
+    private final ShippingFee shippingFee;
 
-    public Product(TopCategory topCategory, ProductName name, ProductType type, Price price, int shipAmount) {
+    public Product(TopCategory topCategory, ProductName name, ProductType type, Price price, ShippingFee shippingFee) {
         this.topCategory = topCategory;
         this.name = name;
         this.type = type;
         this.price = price;
-        this.shipAmount = shipAmount;
+        this.shippingFee = shippingFee;
     }
 }
