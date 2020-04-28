@@ -15,10 +15,13 @@ public class ProductTest {
         CategoryName lowestCategoryName = new CategoryName("쌀");
         LowestCategory lowestCategory = new LowestCategory(lowestCategoryName);
         SubCategory subCategory = new SubCategory(subCategoryName, lowestCategory);
+
+        ProductName productName = new ProductName("농협", "파주참드림_10KG 포");
+
         assertDoesNotThrow(() ->
                 new Product(
                         new TopCategory(topCategoryName, subCategory),
-                        "일반",
+                        productName,
                         "사과",
                         10_000,
                         500));
