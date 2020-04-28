@@ -5,22 +5,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class ProductTest {
-
+public class TopCategoryTest {
     @Test
-    @DisplayName("카테고리, 상품 타입, 상품명, 기본 가격, 재고 수, 기본 배송비로 상품을 등록합니다.")
-    void constructProduct() {
+    @DisplayName("새로운 최상위 카테고리를 정상적으로 생성합니다.")
+    void createTopCategory() {
         CategoryName topCategoryName = new CategoryName("식품");
         CategoryName subCategoryName = new CategoryName("신선식품");
         CategoryName lowestCategoryName = new CategoryName("쌀");
         LowestCategory lowestCategory = new LowestCategory(lowestCategoryName);
         SubCategory subCategory = new SubCategory(subCategoryName, lowestCategory);
-        assertDoesNotThrow(() ->
-                new Product(
-                        new TopCategory(topCategoryName, subCategory),
-                        "일반",
-                        "사과",
-                        10_000,
-                        500));
+
+        assertDoesNotThrow(() -> new TopCategory(topCategoryName, subCategory));
     }
 }
