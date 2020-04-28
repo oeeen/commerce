@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 
 @NoArgsConstructor
 @Getter
-@Entity
+@Entity(name = "category")
 public class TopCategory extends BaseEntity {
 
     @AttributeOverrides({
