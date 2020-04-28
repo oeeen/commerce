@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain;
+package dev.smjeon.commerce.product.domain.category;
 
 public class LowestCategory {
     private final CategoryName name;

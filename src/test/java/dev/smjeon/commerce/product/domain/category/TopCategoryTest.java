@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain;
+package dev.smjeon.commerce.product.domain.category;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

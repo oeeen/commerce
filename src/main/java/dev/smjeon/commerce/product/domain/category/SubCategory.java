@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain;
+package dev.smjeon.commerce.product.domain.category;
 
 public class SubCategory {
     private final CategoryName name;

@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain;
+package dev.smjeon.commerce.product.domain.category;
 
 import dev.smjeon.commerce.product.domain.exception.InvalidCategoryNameException;
 import lombok.EqualsAndHashCode;
