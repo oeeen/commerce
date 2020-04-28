@@ -18,11 +18,13 @@ public class ProductTest {
 
         ProductName productName = new ProductName("농협", "파주참드림_10KG 포");
 
+        ProductType productType = ProductType.NORMAL;
+
         assertDoesNotThrow(() ->
                 new Product(
                         new TopCategory(topCategoryName, subCategory),
                         productName,
-                        "사과",
+                        productType,
                         10_000,
                         500));
     }
