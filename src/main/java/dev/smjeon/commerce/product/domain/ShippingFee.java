@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Embeddable
 public class ShippingFee {
-    private static final int UPPER_BOUND = 30_000;
+    private static final int UPPER_BOUND = 50_000;
     private static final int LOWER_BOUND = 0;
 
     @Column(nullable = false, name = "shipping_fee")
@@ -23,7 +23,7 @@ public class ShippingFee {
     }
 
     private void validate(int value) {
-        if (value >= UPPER_BOUND || value <= LOWER_BOUND) {
+        if (value > UPPER_BOUND || value <= LOWER_BOUND) {
             throw new InvalidShippingFeeException(value);
         }
     }

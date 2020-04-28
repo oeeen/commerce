@@ -15,12 +15,14 @@ public class ShippingFeeTest {
     }
 
     @Test
+    @DisplayName("배송비는 음수가 불가능합니다.")
     void negativeShippingFee() {
         assertThrows(InvalidShippingFeeException.class, () -> new ShippingFee(-100));
     }
 
     @Test
+    @DisplayName("50,000원 초과의 배송비는 불가능합니다.")
     void tooHighShippingFee() {
-        assertThrows(InvalidShippingFeeException.class, () -> new ShippingFee(40_000));
+        assertThrows(InvalidShippingFeeException.class, () -> new ShippingFee(60_000));
     }
 }
