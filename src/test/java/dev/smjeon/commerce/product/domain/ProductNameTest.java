@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.exception.InvalidBrandNameException;
+import dev.smjeon.commerce.product.exception.InvalidBrandNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
-package dev.smjeon.commerce.product.domain.category;
+package dev.smjeon.commerce.category.domain;
 
-import dev.smjeon.commerce.product.domain.exception.InvalidCategoryNameException;
+import dev.smjeon.commerce.category.exception.InvalidCategoryNameException;
 import lombok.EqualsAndHashCode;
 
 import java.util.regex.Matcher;

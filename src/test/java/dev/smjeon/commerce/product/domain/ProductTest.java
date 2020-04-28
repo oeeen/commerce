@@ -1,9 +1,9 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.category.CategoryName;
-import dev.smjeon.commerce.product.domain.category.LowestCategory;
-import dev.smjeon.commerce.product.domain.category.SubCategory;
-import dev.smjeon.commerce.product.domain.category.TopCategory;
+import dev.smjeon.commerce.category.domain.CategoryName;
+import dev.smjeon.commerce.category.domain.LowestCategory;
+import dev.smjeon.commerce.category.domain.SubCategory;
+import dev.smjeon.commerce.category.domain.TopCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

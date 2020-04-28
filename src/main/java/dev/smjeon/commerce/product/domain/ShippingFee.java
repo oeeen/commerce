@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.exception.InvalidShippingFeeException;
+import dev.smjeon.commerce.product.exception.InvalidShippingFeeException;
 
 public class ShippingFee {
     private static final int UPPER_BOUND = 30_000;

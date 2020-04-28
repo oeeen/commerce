@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.exception.InvalidPriceException;
+import dev.smjeon.commerce.product.exception.InvalidPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

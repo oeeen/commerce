@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain.exception;
+package dev.smjeon.commerce.category.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

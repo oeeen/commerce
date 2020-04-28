@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.exception.InvalidPriceException;
+import dev.smjeon.commerce.product.exception.InvalidPriceException;
 
 public class Price {
     private static final int UPPER_BOUND = 100_000_000;

@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
-import dev.smjeon.commerce.product.domain.category.TopCategory;
+import dev.smjeon.commerce.category.domain.TopCategory;
 
 public class Product {
     private final TopCategory topCategory;

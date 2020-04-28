@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.product.domain.category;
+package dev.smjeon.commerce.category.domain;
 
 public class TopCategory {
     private final CategoryName name;
