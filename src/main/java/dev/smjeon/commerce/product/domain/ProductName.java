@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 @EqualsAndHashCode(of = {"brandName", "productName"})
 public class ProductName {
-    private static final String PATTERN = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*";
+    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]*";
 
     private final String brandName;
     private final String productName;
@@ -24,7 +24,7 @@ public class ProductName {
         Matcher matcher = pattern.matcher(brandName);
 
         if (!matcher.matches()) {
-            throw new InvalidBrandNameException();
+            throw new InvalidBrandNameException(brandName);
         }
     }
 }

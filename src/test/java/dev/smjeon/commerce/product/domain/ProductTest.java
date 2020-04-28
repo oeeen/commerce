@@ -20,12 +20,14 @@ public class ProductTest {
 
         ProductType productType = ProductType.NORMAL;
 
+        Price price = new Price(10_000);
+
         assertDoesNotThrow(() ->
                 new Product(
                         new TopCategory(topCategoryName, subCategory),
                         productName,
                         productType,
-                        10_000,
+                        price,
                         500));
     }
 }

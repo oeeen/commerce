@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 @EqualsAndHashCode(of = "value")
 public class CategoryName {
-    private static final String PATTERN = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*";
+    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣]*";
 
     private final String value;
 
@@ -22,7 +22,7 @@ public class CategoryName {
         Matcher matcher = pattern.matcher(value);
 
         if (!matcher.matches()) {
-            throw new InvalidCategoryNameException();
+            throw new InvalidCategoryNameException(value);
         }
     }
 }
