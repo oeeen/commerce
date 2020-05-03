@@ -14,7 +14,7 @@ public class UserTest {
     void constructUser() {
         String name = "Seongmo";
         String nickName = "Martin";
-        String email = "oeeen3@gmail.com";
+        Email email = new Email("oeeen3@gmail.com");
         String password = "Aa12345!";
 
         assertDoesNotThrow(() -> new User(email, password, name, nickName));
@@ -29,7 +29,7 @@ public class UserTest {
 
         String name = "Seongmo";
         String nickName = "Martin";
-        String email = "oeeen3@gmail.com";
+        Email email = new Email("oeeen3@gmail.com");
         String password = "Aa12345!";
 
         User user = new User(email, password, name, nickName);
