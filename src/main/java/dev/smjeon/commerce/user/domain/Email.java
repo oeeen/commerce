@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.user.domain;
 
 import dev.smjeon.commerce.user.exception.InvalidEmailException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +12,11 @@ import java.util.regex.Pattern;
 
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode(of = "email")
 @Embeddable
 public class Email {
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, name = "email")
     private String email;
 
     private static final String PATTERN = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}";
