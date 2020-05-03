@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,12 +16,13 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode(of = "email")
 @Embeddable
 public class Email {
+    private static final String PATTERN = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}";
+
+    @Transient
+    private final Pattern pattern = Pattern.compile(PATTERN);
 
     @Column(nullable = false, name = "email")
     private String email;
-
-    private static final String PATTERN = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}";
-    private final Pattern pattern = Pattern.compile(PATTERN);
 
     public Email(String email) {
         validate(email);
