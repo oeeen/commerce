@@ -13,7 +13,7 @@ public class UserTest {
     @DisplayName("유저를 새로 생성할 때는 이메일, 비밀번호, 실명, 닉네임이 필요합니다.")
     void constructUser() {
         String name = "Seongmo";
-        String nickName = "Martin";
+        NickName nickName = new NickName("Martin");
         Email email = new Email("oeeen3@gmail.com");
         String password = "Aa12345!";
 
@@ -28,7 +28,7 @@ public class UserTest {
         LocalDate birthday = LocalDate.of(1992, 6, 16);
 
         String name = "Seongmo";
-        String nickName = "Martin";
+        NickName nickName = new NickName("Martin");
         Email email = new Email("oeeen3@gmail.com");
         String password = "Aa12345!";
 

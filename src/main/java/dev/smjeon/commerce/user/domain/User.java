@@ -24,8 +24,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String nickName;
+    @Embedded
+    private NickName nickName;
 
     @Enumerated
     private Gender gender;
@@ -34,7 +34,7 @@ public class User extends BaseEntity {
 
     private LocalDate birthday;
 
-    public User(Email email, String password, String name, String nickName) {
+    public User(Email email, String password, String name, NickName nickName) {
         this.email = email;
         this.password = password;
         this.name = name;
