@@ -18,6 +18,7 @@ public class User extends BaseEntity {
     @Embedded
     private Email email;
 
+    @Embedded
     private Password password;
 
     @Column(nullable = false)
