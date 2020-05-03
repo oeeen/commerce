@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 @Embeddable
 public class CategoryName {
     private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣]*";
+    private final Pattern pattern = Pattern.compile(PATTERN);
 
     @Column(nullable = false)
     private String value;
@@ -26,7 +27,6 @@ public class CategoryName {
     }
 
     private void validate(String value) {
-        Pattern pattern = Pattern.compile(PATTERN);
         Matcher matcher = pattern.matcher(value);
 
         if (!matcher.matches()) {
