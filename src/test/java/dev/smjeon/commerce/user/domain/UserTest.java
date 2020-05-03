@@ -15,7 +15,7 @@ public class UserTest {
         String name = "Seongmo";
         NickName nickName = new NickName("Martin");
         Email email = new Email("oeeen3@gmail.com");
-        String password = "Aa12345!";
+        Password password = new Password("Aa12345!");
 
         assertDoesNotThrow(() -> new User(email, password, name, nickName));
     }
@@ -30,7 +30,7 @@ public class UserTest {
         String name = "Seongmo";
         NickName nickName = new NickName("Martin");
         Email email = new Email("oeeen3@gmail.com");
-        String password = "Aa12345!";
+        Password password = new Password("Aa12345!");
 
         User user = new User(email, password, name, nickName);
         user.updateGender(gender);
