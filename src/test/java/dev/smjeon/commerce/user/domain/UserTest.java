@@ -23,7 +23,7 @@ public class UserTest {
     @Test
     @DisplayName("추가 정보로 성별, 연령정보, 생일 정보를 받으면 기존 유저를 업데이트합니다.")
     void moreInformation() {
-        String gender = "남";
+        Gender gender = Gender.MALE;
         int age = 20;
         LocalDate birthday = LocalDate.of(1992, 6, 16);
 
@@ -40,5 +40,8 @@ public class UserTest {
         assertEquals(user.getGender(), gender);
         assertEquals(user.getAge(), age);
         assertEquals(user.getBirthday(), birthday);
+
+        user.updateGender(Gender.FEMALE);
+        assertEquals(user.getGender(), Gender.FEMALE);
     }
 }

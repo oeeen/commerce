@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -26,7 +27,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String nickName;
 
-    private String gender;
+    @Enumerated
+    private Gender gender;
 
     private int age;
 
@@ -39,7 +41,7 @@ public class User extends BaseEntity {
         this.nickName = nickName;
     }
 
-    public void updateGender(String gender) {
+    public void updateGender(Gender gender) {
         this.gender = gender;
     }
 
