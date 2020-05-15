@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.user.application;
 
 import dev.smjeon.commerce.security.UserContext;
+import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.dto.UserResponseDto;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
@@ -28,8 +29,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserContext findByUserName(String userName) {
-        User user = userRepository.findByName(userName).orElseThrow(() -> new NotFoundUserException(userName));
+    public UserContext findByEmail(Email email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundUserException(email.getEmail()));
 
         return modelMapper.map(user, UserContext.class);
     }

@@ -4,6 +4,7 @@ import dev.smjeon.commerce.security.exception.UnauthorizedException;
 import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.security.token.PreAuthorizationToken;
 import dev.smjeon.commerce.user.application.UserService;
+import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
 import dev.smjeon.commerce.user.repository.UserRepository;
@@ -28,13 +29,13 @@ public class SocialLoginAuthenticationProvider implements AuthenticationProvider
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         PreAuthorizationToken token = (PreAuthorizationToken) authentication;
 
-        String userName = token.getUserName();
+        Email email = token.getEmail();
         String password = token.getUserPassword();
 
-        User user = userRepository.findByName(userName).orElseThrow(() -> new NotFoundUserException(userName));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundUserException(email.getEmail()));
 
         if (isCorrectPassword(password, user)) {
-            return new PostAuthorizationToken(userService.findByUserName(userName));
+            return new PostAuthorizationToken(userService.findByEmail(email));
         }
         throw new UnauthorizedException();
     }
