@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
@@ -33,6 +34,10 @@ public class User extends BaseEntity {
     private int age;
 
     private LocalDate birthday;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false, name = "user_role")
+    private UserRole userRole;
 
     public User(Email email, Password password, String name, NickName nickName) {
         this.email = email;
