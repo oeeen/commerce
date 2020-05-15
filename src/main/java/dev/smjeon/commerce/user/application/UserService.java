@@ -1,7 +1,9 @@
 package dev.smjeon.commerce.user.application;
 
+import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.dto.UserResponseDto;
+import dev.smjeon.commerce.user.exception.NotFoundUserException;
 import dev.smjeon.commerce.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,11 @@ public class UserService {
         return users.stream()
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public UserContext findByUserName(String userName) {
+        User user = userRepository.findByName(userName).orElseThrow(() -> new NotFoundUserException(userName));
+
+        return modelMapper.map(user, UserContext.class);
     }
 }
