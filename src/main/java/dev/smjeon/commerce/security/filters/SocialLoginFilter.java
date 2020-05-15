@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class SocialLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    protected SocialLoginFilter(String defaultFilterProcessesUrl) {
+    public SocialLoginFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
     }
 
