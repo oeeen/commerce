@@ -36,14 +36,14 @@ public class User extends BaseEntity {
     private LocalDate birthday;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, name = "user_role")
     private UserRole userRole;
 
-    public User(Email email, Password password, String name, NickName nickName) {
+    public User(Email email, Password password, String name, NickName nickName, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickName = nickName;
+        this.userRole = userRole;
     }
 
     public void updateGender(Gender gender) {

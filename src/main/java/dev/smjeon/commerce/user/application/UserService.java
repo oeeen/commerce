@@ -3,6 +3,7 @@ package dev.smjeon.commerce.user.application;
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
+import dev.smjeon.commerce.user.domain.UserRole;
 import dev.smjeon.commerce.user.dto.UserRequestDto;
 import dev.smjeon.commerce.user.dto.UserResponseDto;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
@@ -39,7 +40,10 @@ public class UserService {
 
     public UserResponseDto save(UserRequestDto userRequestDto) {
         checkDuplicatedEmail(userRequestDto);
-        User user = userRepository.save(modelMapper.map(userRequestDto, User.class));
+        User user = new User(userRequestDto.getEmail(), userRequestDto.getPassword(),
+                userRequestDto.getUserName(), userRequestDto.getNickName(), UserRole.BUYER);
+
+        userRepository.save(user);
 
         return modelMapper.map(user, UserResponseDto.class);
     }
