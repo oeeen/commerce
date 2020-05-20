@@ -1,6 +1,6 @@
 const SignUpApp = (() => {
 
-    const SignUpController = () => {
+    const SignUpController = function () {
         const signUpService = new SignUpService();
 
         const signUp = () => {
@@ -10,14 +10,14 @@ const SignUpApp = (() => {
 
         const init = () => {
             signUp();
-        }
+        };
 
         return {
             init: init,
-        }
+        };
     };
 
-    const SignUpService = () => {
+    const SignUpService = function () {
         const signUpApi = new SignUpApi();
 
         if (AppStorage.check('sign-up-running')) return;
@@ -35,6 +35,8 @@ const SignUpApp = (() => {
                 userName: userName.value,
                 password: password.value,
             };
+
+            console.log("안녕안녕");
 
             signUpApi.signUp(data)
                 .then(response => {
@@ -55,7 +57,7 @@ const SignUpApp = (() => {
         }
     }
 
-    const SignUpApi = () => {
+    const SignUpApi = function () {
         const signUp = (data) => {
             return Api.post('/api/users/signup', data);
         }
