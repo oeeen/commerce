@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/login.css">
+    <title>로그인</title>
+</head>
+<body>
+<div class="content-wrapper">
+    <div id="login-content-root">
+        <header class="login-header">
+            <h1 class="login-logo">
+                <a href="https://smj-commerce.com" class="login-logo-link">
+                    <img src="img/logo.jpg" alt="smj-commerce">
+                </a>
+            </h1>
+        </header>
+        <form class="login-form" method="post" action="/login">
+            <div id="login_content">
+                <label class="login-wrap" for="login-email-input">
+                    <span class="login-input-group login-input-group-icon">
+                        <img src="img/email.png" alt="email" class="login-email-icon"></span>
+                    <span class="login-input-group">
+                        <input type="email" class="login-input" maxlength="80" name="email" id="login-email-input"
+                               value="" placeholder="아이디(이메일)" autocomplete="off">
+                    </span>
+                </label>
+                <label class="login-wrap" for="login-password-input">
+                    <span class="login-input-group login-input-group-icon">
+                        <img src="img/password.png" alt="password" class="login-password-icon"></span>
+                    <span class="login-input-group">
+                        <input type="password" class="login-input" value="" name="password" id="login-password-input"
+                               placeholder="비밀번호">
+                    </span>
+                </label>
+
+                <div class="login-content-util">
+                    <label for="login-keep-state" class="login-checkbox login-util-keep-login">
+                        <input class="login-checkbox-input" type="checkbox" id="login-keep-state">
+                        <span class="login-checkbox-label">자동로그인</span>
+                    </label>
+                    <a href="/login/findUserInfo" class="login-link find-id-password">
+                        아이디(이메일)/비밀번호 찾기
+                    </a>
+                </div>
+
+                <div class="login-content-trigger">
+                    <button class="login-button login-submit-button" type="submit">로그인</button>
+                    <hr class="login-separator">
+                    <a href="/signin" class="signin-button">회원가입</a>
+                    <hr class="login-separator">
+                    <a href="/login/naver"><img src="img/naver_login.png" alt="naver_login" class="social-login-button"></a>
+                    <hr class="login-separator">
+                    <a href="/login/kakao"><img src="img/kakao_login.png" alt="kakao_login" class="social-login-button"></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

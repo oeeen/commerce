@@ -1,0 +1,29 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.top-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 20px;
+    font-family: sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    grid-column: span 1;
+}
+
+.top-bar {
+    width: auto;
+    height: 25px;
+    border: solid 2px #000000;
+    background-color: #ffffff;
+}
