@@ -34,7 +34,7 @@ class UserLoginControllerTest {
     @Test
     void showSigninPage() {
         webTestClient.get()
-                .uri("/signin")
+                .uri("/signup")
                 .exchange()
                 .expectStatus()
                 .isOk()

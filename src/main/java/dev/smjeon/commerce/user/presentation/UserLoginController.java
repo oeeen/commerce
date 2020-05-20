@@ -1,18 +1,18 @@
 package dev.smjeon.commerce.user.presentation;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UserLoginController {
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String showLoginPage() {
         return "login";
     }
 
-    @RequestMapping("/signin")
-    public String showSigninPage() {
-        return "signin";
+    @GetMapping("/signup")
+    public String showSignUpPage() {
+        return "signup";
     }
 }
