@@ -29,14 +29,14 @@ const SignUpApp = (() => {
             const email = document.getElementById("login-email-input");
             const password = document.getElementById("login-password-input");
             const userName = document.getElementById("login-user-name-input");
+            const nickName = document.getElementById("login-user-nickname-input");
 
             const data = {
                 email: email.value,
                 userName: userName.value,
+                nickName: nickName.value,
                 password: password.value,
             };
-
-            console.log("안녕안녕");
 
             signUpApi.signUp(data)
                 .then(response => {
