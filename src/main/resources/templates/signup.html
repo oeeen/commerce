@@ -14,47 +14,55 @@
             </a>
         </h1>
     </header>
-    <form class="login-form" method="post" action="/login">
-        <div id="login_content">
-            <label class="login-wrap" for="login-email-input">
+    <div id="login_content">
+        <label class="login-wrap" for="login-email-input">
             <span class="login-input-group login-input-group-icon">
                 <img src="img/email.png" alt="email" class="login-email-icon">
             </span>
-                <span class="login-input-group">
+            <span class="login-input-group">
                 <input type="email" class="login-input" maxlength="80" name="email" id="login-email-input" value=""
                        placeholder="아이디(이메일)" autocomplete="off">
             </span>
-            </label>
-            <label class="login-wrap" for="login-password-input">
+        </label>
+        <label class="login-wrap" for="login-password-input">
             <span class="login-input-group login-input-group-icon">
                 <img src="img/password.png" alt="password" class="login-password-icon">
             </span>
-                <span class="login-input-group">
+            <span class="login-input-group">
                 <input type="password" class="login-input" value="" name="password" id="login-password-input"
                        placeholder="비밀번호(영문 대, 소문자, 숫자, 특수문자 모두 포함 8자 이상)">
             </span>
-            </label>
-            <label class="login-wrap" for="login-password-input-check">
+        </label>
+        <label class="login-wrap" for="login-password-input-check">
             <span class="login-input-group login-input-group-icon">
                 <img src="img/password.png" alt="password-check" class="login-password-icon">
             </span>
-                <span class="login-input-group">
+            <span class="login-input-group">
                 <input type="password" class="login-input" value="" name="password_check"
                        id="login-password-input-check" placeholder="비밀번호 확인">
             </span>
-            </label>
-            <label class="login-wrap" for="login-user-name-input">
+        </label>
+        <label class="login-wrap" for="login-user-name-input">
             <span class="login-input-group login-input-group-icon">
                 <img src="img/user_name.png" alt="user-name" class="login-user-name-icon">
             </span>
-                <span class="login-input-group">
+            <span class="login-input-group">
                 <input type="text" class="login-input" value="" name="user-name" id="login-user-name-input"
                        placeholder="이름">
             </span>
-            </label>
-            <button class="login-button login-submit-button" type="submit">가입하기</button>
-        </div>
-    </form>
+        </label>
+        <label class="login-wrap" for="login-user-nickname-input">
+            <span class="login-input-group login-input-group-icon">
+                <img src="img/user_name.png" alt="user-name" class="login-user-name-icon">
+            </span>
+            <span class="login-input-group">
+                <input type="text" class="login-input" value="" name="user-name" id="login-user-nickname-input"
+                       placeholder="닉네임">
+            </span>
+        </label>
+        <button id="signup-btn" class="login-button" type="button">가입하기</button>
+    </div>
 </div>
+<script type="text/javascript" src="../static/js/signup.js"></script>
 </body>
 </html>
