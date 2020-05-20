@@ -10,4 +10,9 @@ public class UserLoginController {
     public String showLoginPage() {
         return "login";
     }
+
+    @RequestMapping("/signin")
+    public String showSigninPage() {
+        return "signin";
+    }
 }
