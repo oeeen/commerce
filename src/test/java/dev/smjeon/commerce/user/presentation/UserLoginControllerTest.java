@@ -25,9 +25,23 @@ class UserLoginControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .consumeWith((res) -> {
+                .consumeWith(res -> {
                     String body = new String(Objects.requireNonNull(res.getResponseBody()));
                     assertTrue(body.contains("<title>로그인</title>"));
+                });
+    }
+
+    @Test
+    void showSigninPage() {
+        webTestClient.get()
+                .uri("/signin")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .consumeWith(res -> {
+                    String body = new String(Objects.requireNonNull(res.getResponseBody()));
+                    assertTrue(body.contains("<title>회원가입</title>"));
                 });
     }
 }
