@@ -75,6 +75,15 @@ body {
     margin: 16px;
 }
 
+.login-user-name-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    background-image: url("img/user_name.png");
+    background-size: 15px 15px;
+    margin: 16px;
+}
+
 .login-content-util {
     margin: 12px 0 0;
 }
