@@ -28,6 +28,7 @@ body {
     height: 100%;
     border-right: 1px solid #ccc;
     background-color: #fafafa;
+    text-align: center;
 }
 
 .login-input {
@@ -62,6 +63,7 @@ body {
     vertical-align: middle;
     background-image: url("img/email.png");
     background-size: 15px 15px;
+    margin: 16px;
 }
 
 .login-password-icon {
@@ -70,6 +72,7 @@ body {
     vertical-align: middle;
     background-image: url("img/password.png");
     background-size: 15px 15px;
+    margin: 16px;
 }
 
 .login-content-util {
