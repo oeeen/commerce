@@ -4,6 +4,7 @@ import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
+import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
@@ -52,5 +53,13 @@ public class UserService {
         if (userRepository.existsByEmail(userSignUpRequest.getEmail())) {
             throw new DuplicatedEmailException(userSignUpRequest.getEmail());
         }
+    }
+
+    public UserResponse login(UserLoginRequest userLoginRequest) {
+        User user =
+                userRepository.findByEmail(userLoginRequest.getEmail())
+                        .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
+
+        return modelMapper.map(user, UserResponse.class);
     }
 }

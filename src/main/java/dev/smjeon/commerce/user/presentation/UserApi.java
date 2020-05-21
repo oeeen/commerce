@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.user.presentation;
 
 import dev.smjeon.commerce.user.application.UserService;
+import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,12 @@ public class UserApi {
         UserResponse signUpUser = userService.save(userSignUpRequest);
 
         return ResponseEntity.ok(signUpUser);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<UserResponse> login(UserLoginRequest userLoginRequest) {
+        UserResponse loginUser = userService.login(userLoginRequest);
+
+        return ResponseEntity.ok(loginUser);
     }
 }
