@@ -5,6 +5,7 @@ import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.security.token.PreAuthorizationToken;
 import dev.smjeon.commerce.user.application.UserService;
 import dev.smjeon.commerce.user.domain.Email;
+import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
 import dev.smjeon.commerce.user.repository.UserRepository;
@@ -30,7 +31,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         PreAuthorizationToken token = (PreAuthorizationToken) authentication;
 
         Email email = token.getEmail();
-        String password = token.getUserPassword();
+        Password password = token.getUserPassword();
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundUserException(email.getEmail()));
 
@@ -40,8 +41,8 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         throw new UnauthorizedException();
     }
 
-    private boolean isCorrectPassword(String password, User user) {
-        return passwordEncoder.matches(user.getPassword().getValue(), password);
+    private boolean isCorrectPassword(Password password, User user) {
+        return passwordEncoder.matches(user.getPassword().getValue(), password.getValue());
     }
 
     @Override
