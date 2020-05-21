@@ -5,7 +5,7 @@ import dev.smjeon.commerce.user.domain.NickName;
 import lombok.Getter;
 
 @Getter
-public class UserResponseDto {
+public class UserResponse {
     private Email email;
     private String name;
     private NickName nickName;

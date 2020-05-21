@@ -4,8 +4,8 @@ import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
-import dev.smjeon.commerce.user.dto.UserRequestDto;
-import dev.smjeon.commerce.user.dto.UserResponseDto;
+import dev.smjeon.commerce.user.dto.UserResponse;
+import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
 import dev.smjeon.commerce.user.repository.UserRepository;
@@ -25,10 +25,10 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
-    public List<UserResponseDto> findAll() {
+    public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> modelMapper.map(user, UserResponseDto.class))
+                .map(user -> modelMapper.map(user, UserResponse.class))
                 .collect(Collectors.toList());
     }
 
@@ -38,19 +38,19 @@ public class UserService {
         return modelMapper.map(user, UserContext.class);
     }
 
-    public UserResponseDto save(UserRequestDto userRequestDto) {
-        checkDuplicatedEmail(userRequestDto);
-        User user = new User(userRequestDto.getEmail(), userRequestDto.getPassword(),
-                userRequestDto.getUserName(), userRequestDto.getNickName(), UserRole.BUYER);
+    public UserResponse save(UserSignUpRequest userSignUpRequest) {
+        checkDuplicatedEmail(userSignUpRequest);
+        User user = new User(userSignUpRequest.getEmail(), userSignUpRequest.getPassword(),
+                userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER);
 
         userRepository.save(user);
 
-        return modelMapper.map(user, UserResponseDto.class);
+        return modelMapper.map(user, UserResponse.class);
     }
 
-    private void checkDuplicatedEmail(UserRequestDto userRequestDto) {
-        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
-            throw new DuplicatedEmailException(userRequestDto.getEmail());
+    private void checkDuplicatedEmail(UserSignUpRequest userSignUpRequest) {
+        if (userRepository.existsByEmail(userSignUpRequest.getEmail())) {
+            throw new DuplicatedEmailException(userSignUpRequest.getEmail());
         }
     }
 }

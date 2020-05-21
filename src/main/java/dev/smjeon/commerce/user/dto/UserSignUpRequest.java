@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class UserRequestDto {
+public class UserSignUpRequest {
     private Email email;
     private String userName;
     private NickName nickName;
     private Password password;
 
-    public UserRequestDto(Email email, String userName, NickName nickName, Password password) {
+    public UserSignUpRequest(Email email, String userName, NickName nickName, Password password) {
         this.email = email;
         this.userName = userName;
         this.nickName = nickName;

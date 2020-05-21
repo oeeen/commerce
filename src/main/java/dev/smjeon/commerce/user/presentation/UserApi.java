@@ -1,8 +1,8 @@
 package dev.smjeon.commerce.user.presentation;
 
 import dev.smjeon.commerce.user.application.UserService;
-import dev.smjeon.commerce.user.dto.UserRequestDto;
-import dev.smjeon.commerce.user.dto.UserResponseDto;
+import dev.smjeon.commerce.user.dto.UserResponse;
+import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +22,13 @@ public class UserApi {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> findAll() {
+    public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> save(@RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto signUpUser = userService.save(userRequestDto);
+    public ResponseEntity<UserResponse> save(@RequestBody UserSignUpRequest userSignUpRequest) {
+        UserResponse signUpUser = userService.save(userSignUpRequest);
 
         return ResponseEntity.ok(signUpUser);
     }
