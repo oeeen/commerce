@@ -14,13 +14,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class LoginAuthenticationProvider implements AuthenticationProvider {
+public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
     private UserService userService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-    public LoginAuthenticationProvider(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public FormLoginAuthenticationProvider(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
