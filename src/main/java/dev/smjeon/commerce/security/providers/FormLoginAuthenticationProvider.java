@@ -12,18 +12,17 @@ import dev.smjeon.commerce.user.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
     private UserService userService;
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
 
-    public FormLoginAuthenticationProvider(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public FormLoginAuthenticationProvider(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,14 +34,10 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundUserException(email.getEmail()));
 
-        if (isCorrectPassword(password, user)) {
+        if (userService.isCorrectPassword(password, user)) {
             return new PostAuthorizationToken(userService.findByEmail(email));
         }
         throw new UnauthorizedException();
-    }
-
-    private boolean isCorrectPassword(Password password, User user) {
-        return passwordEncoder.matches(user.getPassword().getValue(), password.getValue());
     }
 
     @Override
