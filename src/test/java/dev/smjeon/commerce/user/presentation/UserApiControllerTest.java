@@ -81,7 +81,7 @@ public class UserApiControllerTest {
                         .with("password", password.getValue()))
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isFound();
     }
 
     private void register(UserSignUpRequest userSignUpRequest) {
