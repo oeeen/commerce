@@ -10,16 +10,16 @@
     <div id="login-content-root">
         <header class="login-header">
             <h1 class="login-logo">
-                <a href="https://smj-commerce.com" class="login-logo-link">
+                <a href="https://smj-commerce.com">
                     <img src="img/logo.jpg" alt="smj-commerce">
                 </a>
             </h1>
         </header>
-        <form class="login-form" method="post" action="/login">
+        <form class="login-form" method="post" action="/api/users/signin">
             <div id="login_content">
                 <label class="login-wrap" for="login-email-input">
                     <span class="login-input-group login-input-group-icon">
-                        <img src="img/email.png" alt="email" class="login-email-icon"></span>
+                        <img src="img/email.png" alt="email" class="login-icon"></span>
                     <span class="login-input-group">
                         <input type="email" class="login-input" maxlength="80" name="email" id="login-email-input"
                                value="" placeholder="아이디(이메일)" autocomplete="off">
@@ -27,7 +27,7 @@
                 </label>
                 <label class="login-wrap" for="login-password-input">
                     <span class="login-input-group login-input-group-icon">
-                        <img src="img/password.png" alt="password" class="login-password-icon"></span>
+                        <img src="img/password.png" alt="password" class="login-icon"></span>
                     <span class="login-input-group">
                         <input type="password" class="login-input" value="" name="password" id="login-password-input"
                                placeholder="비밀번호">
@@ -47,7 +47,7 @@
                 <div class="login-content-trigger">
                     <button class="login-button login-submit-button" type="submit">로그인</button>
                     <hr class="login-separator">
-                    <a href="/signin" class="signin-button">회원가입</a>
+                    <a href="/signup" class="signin-button">회원가입</a>
                     <hr class="login-separator">
                     <a href="/login/naver"><img src="img/naver_login.png" alt="naver_login" class="social-login-button"></a>
                     <hr class="login-separator">

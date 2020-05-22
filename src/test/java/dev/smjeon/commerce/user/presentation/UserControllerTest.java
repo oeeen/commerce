@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserLoginControllerTest {
+class UserControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -34,7 +34,7 @@ class UserLoginControllerTest {
     @Test
     void showSigninPage() {
         webTestClient.get()
-                .uri("/signin")
+                .uri("/signup")
                 .exchange()
                 .expectStatus()
                 .isOk()

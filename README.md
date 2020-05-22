@@ -12,6 +12,7 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - Java 8
 - SpringBoot 2.2.6
 - Spring Data JPA
+- Spring Security
 - H2, MySQL
 - thymeleaf
 

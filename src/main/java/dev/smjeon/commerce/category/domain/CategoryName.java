@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,9 @@ import java.util.regex.Pattern;
 public class CategoryName {
     private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣]*";
 
+    @Transient
+    private final Pattern pattern = Pattern.compile(PATTERN);
+
     @Column(nullable = false)
     private String value;
 
@@ -26,7 +30,6 @@ public class CategoryName {
     }
 
     private void validate(String value) {
-        Pattern pattern = Pattern.compile(PATTERN);
         Matcher matcher = pattern.matcher(value);
 
         if (!matcher.matches()) {

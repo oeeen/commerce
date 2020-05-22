@@ -8,10 +8,6 @@ body {
     position: relative;
 }
 
-.login-logo-link {
-    background-image: url("img/logo.jpg");
-}
-
 .login-input-group {
     position: relative;
     overflow: hidden;
@@ -57,29 +53,10 @@ body {
     transition: border-color .25s ease;
 }
 
-.login-email-icon {
+.login-icon {
     width: 16px;
     height: 16px;
     vertical-align: middle;
-    background-image: url("img/email.png");
-    background-size: 15px 15px;
-    margin: 16px;
-}
-
-.login-password-icon {
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    background-image: url("img/password.png");
-    background-size: 15px 15px;
-    margin: 16px;
-}
-
-.login-user-name-icon {
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    background-image: url("img/user_name.png");
     background-size: 15px 15px;
     margin: 16px;
 }
