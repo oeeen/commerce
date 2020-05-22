@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SocialLoginFilter socialLoginFilter() throws Exception {
-        SocialLoginFilter filter = new SocialLoginFilter("/github/oauth");
+        SocialLoginFilter filter = new SocialLoginFilter("/oauth");
         filter.setAuthenticationManager(super.authenticationManagerBean());
 
         return filter;
