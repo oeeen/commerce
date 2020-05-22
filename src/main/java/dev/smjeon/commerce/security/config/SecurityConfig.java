@@ -1,15 +1,17 @@
 package dev.smjeon.commerce.security.config;
 
+import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.SocialLoginFilter;
+import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -17,18 +19,38 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationFailureHandler authenticationFailureHandler;
+    private FormLoginAuthenticationProvider provider;
+
+    public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler,
+                          AuthenticationFailureHandler authenticationFailureHandler,
+                          FormLoginAuthenticationProvider provider) {
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+        this.provider = provider;
     }
 
-    public SocialLoginFilter socialLoginFilter() {
-        return new SocialLoginFilter("/github/oauth");
+    @Bean
+    public SocialLoginFilter socialLoginFilter() throws Exception {
+        SocialLoginFilter filter = new SocialLoginFilter("/github/oauth");
+        filter.setAuthenticationManager(super.authenticationManagerBean());
+
+        return filter;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManagerBean();
+    public FormLoginFilter formLoginFilter() throws Exception {
+        FormLoginFilter filter = new FormLoginFilter("/api/users/signin", authenticationSuccessHandler, authenticationFailureHandler);
+        filter.setAuthenticationManager(super.authenticationManagerBean());
+
+        return filter;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .authenticationProvider(this.provider);
     }
 
     @Override
