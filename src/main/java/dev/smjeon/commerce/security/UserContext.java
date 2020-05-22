@@ -2,8 +2,11 @@ package dev.smjeon.commerce.security;
 
 
 import dev.smjeon.commerce.user.domain.UserRole;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class UserContext {
 
