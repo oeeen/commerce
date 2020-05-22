@@ -2,15 +2,18 @@ package dev.smjeon.commerce.user.application;
 
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.Email;
+import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
+import dev.smjeon.commerce.user.exception.InvalidPasswordException;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
 import dev.smjeon.commerce.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
     }
 
@@ -41,7 +46,9 @@ public class UserService {
 
     public UserResponse save(UserSignUpRequest userSignUpRequest) {
         checkDuplicatedEmail(userSignUpRequest);
-        User user = new User(userSignUpRequest.getEmail(), userSignUpRequest.getPassword(),
+        String encodedPassword = passwordEncoder.encode(userSignUpRequest.getPassword().getValue());
+
+        User user = new User(userSignUpRequest.getEmail(), new Password(encodedPassword),
                 userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER);
 
         userRepository.save(user);
@@ -60,6 +67,14 @@ public class UserService {
                 userRepository.findByEmail(userLoginRequest.getEmail())
                         .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
 
-        return modelMapper.map(user, UserResponse.class);
+        if (passwordEncoder.matches(userLoginRequest.getPassword().getValue(), user.getPassword().getValue())) {
+            return modelMapper.map(user, UserResponse.class);
+        }
+
+        throw new InvalidPasswordException(userLoginRequest.getPassword().getValue());
+    }
+
+    public boolean isCorrectPassword(Password password, User user) {
+        return passwordEncoder.matches(password.getValue(), user.getPassword().getValue());
     }
 }
