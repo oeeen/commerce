@@ -45,7 +45,7 @@ const SignUpApp = (() => {
                 if (json.hasOwnProperty('errorMessage')) {
                     alert(json.errorMessage);
                 } else {
-                    //TODO: Redirect login page
+                    window.location.href = "/login";
                     alert('가입 완료! 로그인 하세요.');
                 }
                 AppStorage.set('sign-up-running', false);
