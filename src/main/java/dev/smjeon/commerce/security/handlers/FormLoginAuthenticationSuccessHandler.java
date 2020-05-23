@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.security.handlers;
 
+import dev.smjeon.commerce.security.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import static dev.smjeon.commerce.support.LoginInterceptor.LOGIN_SESSION_ATTRIBUTE;
 
 @Component
 public class FormLoginAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -18,8 +22,11 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
     @Override
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
             throws IOException, ServletException {
-        // TODO: 2020/05/21 write session value on response
-        logger.debug("Authentication Success");
+        HttpSession httpSession = req.getSession();
+        UserContext userContext = (UserContext) auth.getPrincipal();
+        httpSession.setAttribute(LOGIN_SESSION_ATTRIBUTE, userContext);
+
+        logger.debug("Authentication Success - UserName: {}", userContext.getName());
         res.sendRedirect("/");
     }
 }
