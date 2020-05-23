@@ -3,44 +3,33 @@ package dev.smjeon.commerce.user.presentation;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
-import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserApiControllerTest {
-
-    @Autowired
-    private WebTestClient webTestClient;
+public class UserApiControllerTest extends TestTemplate {
 
     @Test
     @DisplayName("유저 리스트가 출력됩니다.")
     void showUsers() {
-        webTestClient.get()
-                .uri("/api/users")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody()
+        register(userSignUpRequest);
+
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/users", Void.class, HttpStatus.OK,
+                loginSessionId(userLoginRequest.getEmail(), userLoginRequest.getPassword())))
                 .consumeWith(res -> {
                     String body = new String(Objects.requireNonNull(res.getResponseBody()));
                     System.out.println(body);
-                    assertThat(body.contains("smjeon"));
+                    assertThat(body.contains("Seongmo"));
                 });
     }
+
 
     @Test
     @DisplayName("회원 가입이 가능합니다.")
@@ -51,14 +40,7 @@ public class UserApiControllerTest {
         Password password = new Password("aA12345!");
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
 
-        webTestClient.post()
-                .uri("/api/users/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(userSignUpRequest), UserSignUpRequest.class)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody()
+        respondApi(request(HttpMethod.POST, "/api/users/signup", userSignUpRequest, HttpStatus.OK))
                 .jsonPath("$.email.email").isEqualTo(email.getEmail())
                 .jsonPath("$.name").isEqualTo(userName)
                 .jsonPath("$.nickName.nickName").isEqualTo(nickName.getNickName());
@@ -74,7 +56,6 @@ public class UserApiControllerTest {
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
         register(userSignUpRequest);
 
-        UserLoginRequest userLoginRequest = new UserLoginRequest(email, password);
         webTestClient.post()
                 .uri("/api/users/signin")
                 .body(BodyInserters.fromFormData("email", email.getEmail())
@@ -82,15 +63,5 @@ public class UserApiControllerTest {
                 .exchange()
                 .expectStatus()
                 .isFound();
-    }
-
-    private void register(UserSignUpRequest userSignUpRequest) {
-        webTestClient.post()
-                .uri("/api/users/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(userSignUpRequest), UserSignUpRequest.class)
-                .exchange()
-                .expectStatus()
-                .isOk();
     }
 }
