@@ -8,6 +8,8 @@ public interface SocialLoginService {
     String REDIRECT_URI = "redirect_uri";
     String RESPONSE_TYPE = "response_type";
     String EQUAL = "=";
+    String PARAM_SEPARATOR = "?";
+    String AND = "&";
     String CODE = "code";
     String ID = "id";
     String EMAIL = "email";

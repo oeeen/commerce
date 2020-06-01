@@ -29,9 +29,9 @@ public class KakaoLoginService implements SocialLoginService {
     @Override
     public String getRedirectUrl() {
         return kakaoConfig.getAuthorizationUrl() +
-                "?" + CLIENT_ID + EQUAL + kakaoConfig.getClientId() +
-                "&" + REDIRECT_URI + EQUAL + kakaoConfig.getRedirectUrl() +
-                "&" + RESPONSE_TYPE + EQUAL + CODE;
+                PARAM_SEPARATOR + CLIENT_ID + EQUAL + kakaoConfig.getClientId() +
+                AND + REDIRECT_URI + EQUAL + kakaoConfig.getRedirectUrl() +
+                AND + RESPONSE_TYPE + EQUAL + CODE;
     }
 
     @Override

@@ -27,8 +27,8 @@ public class GithubLoginService implements SocialLoginService {
     @Override
     public String getRedirectUrl() {
         return githubConfig.getAuthorizationUrl() +
-                "?" + CLIENT_ID + EQUAL + githubConfig.getClientId() +
-                "&" + REDIRECT_URI + EQUAL + githubConfig.getRedirectUrl();
+                PARAM_SEPARATOR + CLIENT_ID + EQUAL + githubConfig.getClientId() +
+                AND + REDIRECT_URI + EQUAL + githubConfig.getRedirectUrl();
     }
 
     @Override
