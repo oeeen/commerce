@@ -1,6 +1,6 @@
-package dev.smjeon.commerce.oauth.application;
+package dev.smjeon.commerce.oauth.common.application;
 
-import dev.smjeon.commerce.oauth.SocialUserInfo;
+import dev.smjeon.commerce.oauth.common.dto.SocialUserInfo;
 
 public interface SocialLoginService {
     String getRedirectUrl();

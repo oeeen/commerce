@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.oauth.domain;
+package dev.smjeon.commerce.oauth.common.domain;
 
 import dev.smjeon.commerce.common.BaseEntity;
 import dev.smjeon.commerce.user.domain.Email;

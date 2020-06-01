@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.oauth;
+package dev.smjeon.commerce.oauth.common.dto;
 
 import lombok.Getter;
 

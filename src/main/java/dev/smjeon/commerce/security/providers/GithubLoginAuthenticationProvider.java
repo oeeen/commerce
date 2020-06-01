@@ -1,7 +1,7 @@
 package dev.smjeon.commerce.security.providers;
 
-import dev.smjeon.commerce.oauth.application.SocialLoginService;
-import dev.smjeon.commerce.oauth.domain.SocialUserRepository;
+import dev.smjeon.commerce.oauth.common.application.SocialLoginService;
+import dev.smjeon.commerce.oauth.common.domain.SocialUserRepository;
 import dev.smjeon.commerce.security.token.GithubPreAuthorizationToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

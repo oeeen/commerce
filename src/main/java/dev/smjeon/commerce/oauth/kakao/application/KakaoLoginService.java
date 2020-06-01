@@ -1,9 +1,10 @@
-package dev.smjeon.commerce.oauth.application;
+package dev.smjeon.commerce.oauth.kakao.application;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.smjeon.commerce.oauth.SocialUserInfo;
+import dev.smjeon.commerce.oauth.common.application.SocialLoginService;
+import dev.smjeon.commerce.oauth.common.dto.SocialUserInfo;
 import dev.smjeon.commerce.oauth.kakao.KakaoConfig;
 import dev.smjeon.commerce.oauth.kakao.dto.KakaoToken;
 import org.springframework.http.HttpHeaders;

@@ -1,9 +1,9 @@
 package dev.smjeon.commerce.security.providers;
 
-import dev.smjeon.commerce.oauth.SocialUserInfo;
-import dev.smjeon.commerce.oauth.application.SocialLoginService;
-import dev.smjeon.commerce.oauth.domain.SocialLoginUser;
-import dev.smjeon.commerce.oauth.domain.SocialUserRepository;
+import dev.smjeon.commerce.oauth.common.application.SocialLoginService;
+import dev.smjeon.commerce.oauth.common.domain.SocialLoginUser;
+import dev.smjeon.commerce.oauth.common.domain.SocialUserRepository;
+import dev.smjeon.commerce.oauth.common.dto.SocialUserInfo;
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.security.token.SocialPostAuthorizationToken;
 import dev.smjeon.commerce.security.token.SocialPreAuthorizationToken;

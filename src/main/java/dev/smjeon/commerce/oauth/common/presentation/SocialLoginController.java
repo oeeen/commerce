@@ -1,8 +1,8 @@
-package dev.smjeon.commerce.oauth.presentation;
+package dev.smjeon.commerce.oauth.common.presentation;
 
-import dev.smjeon.commerce.oauth.SocialProviders;
-import dev.smjeon.commerce.oauth.application.GithubLoginService;
-import dev.smjeon.commerce.oauth.application.KakaoLoginService;
+import dev.smjeon.commerce.oauth.common.SocialProviders;
+import dev.smjeon.commerce.oauth.github.application.GithubLoginService;
+import dev.smjeon.commerce.oauth.kakao.application.KakaoLoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

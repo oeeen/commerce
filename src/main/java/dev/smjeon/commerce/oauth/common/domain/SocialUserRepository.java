@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.oauth.domain;
+package dev.smjeon.commerce.oauth.common.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
