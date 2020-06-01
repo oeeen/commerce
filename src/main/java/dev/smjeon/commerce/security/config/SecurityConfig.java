@@ -1,7 +1,8 @@
 package dev.smjeon.commerce.security.config;
 
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
-import dev.smjeon.commerce.security.filters.SocialLoginFilter;
+import dev.smjeon.commerce.security.filters.GithubLoginFilter;
+import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
@@ -23,21 +24,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     private AuthenticationFailureHandler authenticationFailureHandler;
     private FormLoginAuthenticationProvider formLoginAuthenticationProvider;
-    private SocialLoginAuthenticationProvider socialLoginAuthenticationProvider;
+    private SocialLoginAuthenticationProvider kakaoLoginAuthenticationProvider;
+    private SocialLoginAuthenticationProvider githubLoginAuthenticationProvider;
 
     public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler,
                           AuthenticationFailureHandler authenticationFailureHandler,
                           FormLoginAuthenticationProvider formLoginAuthenticationProvider,
-                          SocialLoginAuthenticationProvider socialLoginAuthenticationProvider) {
+                          SocialLoginAuthenticationProvider kakaoLoginAuthenticationProvider,
+                          SocialLoginAuthenticationProvider githubLoginAuthenticationProvider) {
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.authenticationFailureHandler = authenticationFailureHandler;
         this.formLoginAuthenticationProvider = formLoginAuthenticationProvider;
-        this.socialLoginAuthenticationProvider = socialLoginAuthenticationProvider;
+        this.kakaoLoginAuthenticationProvider = kakaoLoginAuthenticationProvider;
+        this.githubLoginAuthenticationProvider = githubLoginAuthenticationProvider;
     }
 
     @Bean
-    public SocialLoginFilter socialLoginFilter() throws Exception {
-        SocialLoginFilter filter = new SocialLoginFilter("/oauth/**");
+    public KakaoLoginFilter kakaoLoginFilter() throws Exception {
+        KakaoLoginFilter filter = new KakaoLoginFilter("/oauth/kakao");
+        filter.setAuthenticationManager(super.authenticationManagerBean());
+
+        return filter;
+    }
+
+    @Bean
+    public GithubLoginFilter githubLoginFilter() throws Exception {
+        GithubLoginFilter filter = new GithubLoginFilter("/oauth/github");
         filter.setAuthenticationManager(super.authenticationManagerBean());
 
         return filter;
@@ -55,7 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .authenticationProvider(this.formLoginAuthenticationProvider)
-                .authenticationProvider(this.socialLoginAuthenticationProvider);
+                .authenticationProvider(this.kakaoLoginAuthenticationProvider)
+                .authenticationProvider(this.githubLoginAuthenticationProvider);
     }
 
     @Override
@@ -65,7 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors();
 
         http
-                .addFilterBefore(socialLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(kakaoLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(githubLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
