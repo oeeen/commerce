@@ -3,6 +3,7 @@ package dev.smjeon.commerce.security.config;
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.SocialLoginFilter;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
+import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,19 +22,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     private AuthenticationFailureHandler authenticationFailureHandler;
-    private FormLoginAuthenticationProvider provider;
+    private FormLoginAuthenticationProvider formLoginAuthenticationProvider;
+    private SocialLoginAuthenticationProvider socialLoginAuthenticationProvider;
 
     public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler,
                           AuthenticationFailureHandler authenticationFailureHandler,
-                          FormLoginAuthenticationProvider provider) {
+                          FormLoginAuthenticationProvider formLoginAuthenticationProvider,
+                          SocialLoginAuthenticationProvider socialLoginAuthenticationProvider) {
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.authenticationFailureHandler = authenticationFailureHandler;
-        this.provider = provider;
+        this.formLoginAuthenticationProvider = formLoginAuthenticationProvider;
+        this.socialLoginAuthenticationProvider = socialLoginAuthenticationProvider;
     }
 
     @Bean
     public SocialLoginFilter socialLoginFilter() throws Exception {
-        SocialLoginFilter filter = new SocialLoginFilter("/oauth");
+        SocialLoginFilter filter = new SocialLoginFilter("/oauth/**");
         filter.setAuthenticationManager(super.authenticationManagerBean());
 
         return filter;
@@ -50,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .authenticationProvider(this.provider);
+                .authenticationProvider(this.formLoginAuthenticationProvider)
+                .authenticationProvider(this.socialLoginAuthenticationProvider);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors();
 
         http
-                .addFilterBefore(socialLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(socialLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

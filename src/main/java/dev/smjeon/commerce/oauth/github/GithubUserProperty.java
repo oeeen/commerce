@@ -1,9 +1,9 @@
-package dev.smjeon.commerce.oauth.naver;
+package dev.smjeon.commerce.oauth.github;
 
 import dev.smjeon.commerce.oauth.SocialUserProperty;
 import dev.smjeon.commerce.user.domain.NickName;
 
-public class NaverUserProperty implements SocialUserProperty {
+public class GithubUserProperty implements SocialUserProperty {
     private NickName nickName;
     private String profileUrl;
 
