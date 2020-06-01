@@ -1,14 +1,14 @@
-package dev.smjeon.commerce.oauth.kakao.dto;
+package dev.smjeon.commerce.oauth;
 
 import lombok.Getter;
 
 @Getter
-public class KakaoUserInfo {
+public class SocialUserInfo {
     private String oauthId;
     private String nickName;
     private String email;
 
-    public KakaoUserInfo(String oauthId, String nickName, String email) {
+    public SocialUserInfo(String oauthId, String nickName, String email) {
         this.oauthId = oauthId;
         this.nickName = nickName;
         this.email = email;
