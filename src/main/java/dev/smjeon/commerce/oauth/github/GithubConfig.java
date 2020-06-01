@@ -12,5 +12,8 @@ import org.springframework.context.annotation.Configuration;
 public class GithubConfig {
     private String clientId;
     private String clientSecret;
+    private String authorizationUrl;
     private String redirectUrl;
+    private String accessTokenUrl;
+    private String userInfoUrl;
 }

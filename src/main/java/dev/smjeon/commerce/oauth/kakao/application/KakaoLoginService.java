@@ -1,16 +1,12 @@
-package dev.smjeon.commerce.oauth.application;
+package dev.smjeon.commerce.oauth.kakao.application;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.smjeon.commerce.oauth.SocialProviders;
-import dev.smjeon.commerce.oauth.domain.SocialLoginUser;
-import dev.smjeon.commerce.oauth.domain.SocialUserRepository;
+import dev.smjeon.commerce.oauth.common.application.SocialLoginService;
+import dev.smjeon.commerce.oauth.common.dto.SocialUserInfo;
 import dev.smjeon.commerce.oauth.kakao.KakaoConfig;
 import dev.smjeon.commerce.oauth.kakao.dto.KakaoToken;
-import dev.smjeon.commerce.oauth.kakao.dto.KakaoUserInfo;
-import dev.smjeon.commerce.user.domain.UserRole;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,28 +14,25 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class SocialLoginService {
+public class KakaoLoginService implements SocialLoginService {
     private KakaoConfig kakaoConfig;
-    private SocialUserRepository socialUserRepository;
-    private ModelMapper modelMapper;
 
-    public SocialLoginService(KakaoConfig kakaoConfig, SocialUserRepository socialUserRepository, ModelMapper modelMapper) {
+    public KakaoLoginService(KakaoConfig kakaoConfig) {
         this.kakaoConfig = kakaoConfig;
-        this.socialUserRepository = socialUserRepository;
-        this.modelMapper = modelMapper;
     }
 
-    public String getRedirectUrl(SocialProviders socialProvider) {
+    @Override
+    public String getRedirectUrl() {
         StringBuilder redirectUrl = new StringBuilder();
-        if (socialProvider.equals(SocialProviders.KAKAO)) {
-            redirectUrl.append(kakaoConfig.getAuthorizationUrl());
-            redirectUrl.append("?client_id=").append(kakaoConfig.getClientId());
-            redirectUrl.append("&redirect_uri=").append(kakaoConfig.getRedirectUrl());
-            redirectUrl.append("&response_type=code");
-        }
+        redirectUrl.append(kakaoConfig.getAuthorizationUrl());
+        redirectUrl.append("?client_id=").append(kakaoConfig.getClientId());
+        redirectUrl.append("&redirect_uri=").append(kakaoConfig.getRedirectUrl());
+        redirectUrl.append("&response_type=code");
+
         return redirectUrl.toString();
     }
 
+    @Override
     public String getAccessToken(String code) {
         WebClient webClient = WebClient.builder()
                 .baseUrl(kakaoConfig.getAccessTokenUrl())
@@ -62,7 +55,8 @@ public class SocialLoginService {
         return token.getAccessToken();
     }
 
-    public KakaoUserInfo getUserInfo(String accessToken) {
+    @Override
+    public SocialUserInfo getUserInfo(String accessToken) {
         WebClient webClient = WebClient.builder()
                 .baseUrl(kakaoConfig.getUserInfoUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -81,14 +75,7 @@ public class SocialLoginService {
         JsonObject kakaoAccount = new JsonParser().parse(body).getAsJsonObject().get("kakao_account").getAsJsonObject();
         String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
 
-        KakaoUserInfo userInfo = new KakaoUserInfo(kakaoId, nickName, email);
+        SocialUserInfo userInfo = new SocialUserInfo(kakaoId, nickName, email);
         return userInfo;
-    }
-
-    public SocialLoginUser save(KakaoUserInfo userInfo) {
-        SocialLoginUser user = modelMapper.map(userInfo, SocialLoginUser.class);
-        user.updateUserRole(UserRole.BUYER);
-
-        return socialUserRepository.save(user);
     }
 }

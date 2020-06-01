@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.support;
 
-import dev.smjeon.commerce.oauth.SocialProviderConverter;
+import dev.smjeon.commerce.oauth.common.SocialProviderConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

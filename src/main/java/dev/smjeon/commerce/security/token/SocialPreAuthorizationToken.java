@@ -2,7 +2,7 @@ package dev.smjeon.commerce.security.token;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class SocialPreAuthorizationToken extends UsernamePasswordAuthenticationToken {
+public abstract class SocialPreAuthorizationToken extends UsernamePasswordAuthenticationToken {
     public SocialPreAuthorizationToken(Object principal, Object credentials) {
         super(principal, credentials);
     }

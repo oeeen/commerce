@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.oauth;
+package dev.smjeon.commerce.oauth.common;
 
 import org.springframework.core.convert.converter.Converter;
 
