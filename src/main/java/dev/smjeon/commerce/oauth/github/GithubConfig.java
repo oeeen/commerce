@@ -14,4 +14,6 @@ public class GithubConfig {
     private String clientSecret;
     private String authorizationUrl;
     private String redirectUrl;
+    private String accessTokenUrl;
+    private String userInfoUrl;
 }
