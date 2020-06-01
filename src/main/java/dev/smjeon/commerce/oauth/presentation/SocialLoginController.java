@@ -16,7 +16,7 @@ public class SocialLoginController {
     }
 
     @GetMapping("/login/{socialProvider}")
-    public RedirectView loginWithGithub(@PathVariable SocialProviders socialProvider) {
+    public RedirectView loginWithSocial(@PathVariable SocialProviders socialProvider) {
         String redirectUrl = socialLoginService.getRedirectUrl(socialProvider);
         return new RedirectView(redirectUrl);
     }
