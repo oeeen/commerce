@@ -1,0 +1,17 @@
+kakao:
+  client:
+    clientId: 58efce5b2edb52d754f66713b1bea0b6
+    clientSecret: ZXFd3ZAqCZlnL7O7Rc09iq383niXV4l6
+    authorizationUrl: https://kauth.kakao.com/oauth/authorize
+    accessTokenUrl: https://kauth.kakao.com/oauth/token
+    redirectUrl: http://localhost:8080/oauth/kakao
+    userInfoUrl: https://kapi.kakao.com/v2/user/me
+    logOutUrl: https://kapi.kakao.com/v1/user/logout
+github:
+  client:
+    clientId: 690d863ad8c06d17017b
+    clientSecret: c0a70c22174709c15c1c6f29afbb2384cec347ff
+    authorizationUrl: https://github.com/login/oauth/authorize
+    redirectUrl: http://localhost:8080/oauth/github
+    accessTokenUrl: https://github.com/login/oauth/access_token
+    userInfoUrl: https://api.github.com/user
