@@ -15,6 +15,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class GithubLoginService implements SocialLoginService {
+    private static final String PREFIX = "token ";
+    private static final String NAME = "name";
+
     private GithubConfig githubConfig;
 
     public GithubLoginService(GithubConfig githubConfig) {
@@ -23,12 +26,9 @@ public class GithubLoginService implements SocialLoginService {
 
     @Override
     public String getRedirectUrl() {
-        StringBuilder redirectUrl = new StringBuilder();
-        redirectUrl.append(githubConfig.getAuthorizationUrl());
-        redirectUrl.append("?client_id=").append(githubConfig.getClientId());
-        redirectUrl.append("&redirect_uri=").append(githubConfig.getRedirectUrl());
-
-        return redirectUrl.toString();
+        return githubConfig.getAuthorizationUrl() +
+                PARAM_SEPARATOR + CLIENT_ID + EQUAL + githubConfig.getClientId() +
+                AND + REDIRECT_URI + EQUAL + githubConfig.getRedirectUrl();
     }
 
     @Override
@@ -40,9 +40,9 @@ public class GithubLoginService implements SocialLoginService {
                 .build();
 
         String body = webClient.post()
-                .body(BodyInserters.fromFormData("client_id", githubConfig.getClientId())
-                        .with("client_secret", githubConfig.getClientSecret())
-                        .with("code", code))
+                .body(BodyInserters.fromFormData(CLIENT_ID, githubConfig.getClientId())
+                        .with(CLIENT_SECRET, githubConfig.getClientSecret())
+                        .with(CODE, code))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -57,7 +57,7 @@ public class GithubLoginService implements SocialLoginService {
         WebClient webClient = WebClient.builder()
                 .baseUrl(githubConfig.getUserInfoUrl())
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "token " + accessToken)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, PREFIX + accessToken)
                 .build();
 
         String body = webClient.get()
@@ -66,11 +66,11 @@ public class GithubLoginService implements SocialLoginService {
                 .block();
 
         JsonObject jsonObject = new JsonParser().parse(body).getAsJsonObject();
-        String id = jsonObject.get("id").getAsString();
-        String nickName = jsonObject.get("name").getAsString();
-        String email = jsonObject.get("email").getAsString();
 
-        SocialUserInfo userInfo = new SocialUserInfo(id, nickName, email);
-        return userInfo;
+        String id = jsonObject.get(ID).getAsString();
+        String nickName = jsonObject.get(NAME).getAsString();
+        String email = jsonObject.get(EMAIL).getAsString();
+
+        return new SocialUserInfo(id, nickName, email);
     }
 }

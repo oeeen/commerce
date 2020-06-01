@@ -1,0 +1,13 @@
+kakao:
+  client:
+    authorizationUrl: https://kauth.kakao.com/oauth/authorize
+    accessTokenUrl: https://kauth.kakao.com/oauth/token
+    redirectUrl: http://localhost:8080/oauth/kakao
+    userInfoUrl: https://kapi.kakao.com/v2/user/me
+    logOutUrl: https://kapi.kakao.com/v1/user/logout
+github:
+  client:
+    authorizationUrl: https://github.com/login/oauth/authorize
+    redirectUrl: http://localhost:8080/oauth/github
+    accessTokenUrl: https://github.com/login/oauth/access_token
+    userInfoUrl: https://api.github.com/user
