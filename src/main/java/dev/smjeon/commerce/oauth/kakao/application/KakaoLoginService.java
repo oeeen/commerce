@@ -15,6 +15,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class KakaoLoginService implements SocialLoginService {
+    private static final String PREFIX = "Bearer ";
+    private static final String GRANT_TYPE = "grant_type";
+    private static final String AUTHORIZATION_CODE = "authorization_code";
+    private static final String NICKNAME = "nickname";
+
     private KakaoConfig kakaoConfig;
 
     public KakaoLoginService(KakaoConfig kakaoConfig) {
@@ -23,13 +28,10 @@ public class KakaoLoginService implements SocialLoginService {
 
     @Override
     public String getRedirectUrl() {
-        StringBuilder redirectUrl = new StringBuilder();
-        redirectUrl.append(kakaoConfig.getAuthorizationUrl());
-        redirectUrl.append("?client_id=").append(kakaoConfig.getClientId());
-        redirectUrl.append("&redirect_uri=").append(kakaoConfig.getRedirectUrl());
-        redirectUrl.append("&response_type=code");
-
-        return redirectUrl.toString();
+        return kakaoConfig.getAuthorizationUrl() +
+                "?" + CLIENT_ID + EQUAL + kakaoConfig.getClientId() +
+                "&" + REDIRECT_URI + EQUAL + kakaoConfig.getRedirectUrl() +
+                "&" + RESPONSE_TYPE + EQUAL + CODE;
     }
 
     @Override
@@ -41,11 +43,11 @@ public class KakaoLoginService implements SocialLoginService {
                 .build();
 
         String body = webClient.post()
-                .body(BodyInserters.fromFormData("grant_type", "authorization_code")
-                        .with("client_id", kakaoConfig.getClientId())
-                        .with("redirect_uri", kakaoConfig.getRedirectUrl())
-                        .with("client_secret", kakaoConfig.getClientSecret())
-                        .with("code", code))
+                .body(BodyInserters.fromFormData(GRANT_TYPE, AUTHORIZATION_CODE)
+                        .with(CLIENT_ID, kakaoConfig.getClientId())
+                        .with(REDIRECT_URI, kakaoConfig.getRedirectUrl())
+                        .with(CLIENT_SECRET, kakaoConfig.getClientSecret())
+                        .with(CODE, code))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -61,7 +63,7 @@ public class KakaoLoginService implements SocialLoginService {
                 .baseUrl(kakaoConfig.getUserInfoUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, PREFIX + accessToken)
                 .build();
 
         String body = webClient.post()
@@ -69,13 +71,14 @@ public class KakaoLoginService implements SocialLoginService {
                 .bodyToMono(String.class)
                 .block();
 
-        String kakaoId = new JsonParser().parse(body).getAsJsonObject().get("id").getAsString();
-        JsonObject properties = new JsonParser().parse(body).getAsJsonObject().get("properties").getAsJsonObject();
-        String nickName = properties.getAsJsonObject().get("nickname").getAsString();
-        JsonObject kakaoAccount = new JsonParser().parse(body).getAsJsonObject().get("kakao_account").getAsJsonObject();
-        String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+        JsonObject bodyJsonObject = new JsonParser().parse(body).getAsJsonObject();
+        JsonObject properties = bodyJsonObject.getAsJsonObject().get("properties").getAsJsonObject();
+        JsonObject kakaoAccount = bodyJsonObject.get("kakao_account").getAsJsonObject();
 
-        SocialUserInfo userInfo = new SocialUserInfo(kakaoId, nickName, email);
-        return userInfo;
+        String oauthId = bodyJsonObject.get(ID).getAsString();
+        String nickName = properties.getAsJsonObject().get(NICKNAME).getAsString();
+        String email = kakaoAccount.getAsJsonObject().get(EMAIL).getAsString();
+
+        return new SocialUserInfo(oauthId, nickName, email);
     }
 }
