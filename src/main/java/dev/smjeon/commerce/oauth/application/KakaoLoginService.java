@@ -4,12 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.smjeon.commerce.oauth.SocialUserInfo;
-import dev.smjeon.commerce.oauth.domain.SocialLoginUser;
-import dev.smjeon.commerce.oauth.domain.SocialUserRepository;
 import dev.smjeon.commerce.oauth.kakao.KakaoConfig;
 import dev.smjeon.commerce.oauth.kakao.dto.KakaoToken;
-import dev.smjeon.commerce.user.domain.UserRole;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -19,13 +15,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class KakaoLoginService implements SocialLoginService {
     private KakaoConfig kakaoConfig;
-    private SocialUserRepository socialUserRepository;
-    private ModelMapper modelMapper;
 
-    public KakaoLoginService(KakaoConfig kakaoConfig, SocialUserRepository socialUserRepository, ModelMapper modelMapper) {
+    public KakaoLoginService(KakaoConfig kakaoConfig) {
         this.kakaoConfig = kakaoConfig;
-        this.socialUserRepository = socialUserRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -84,12 +76,5 @@ public class KakaoLoginService implements SocialLoginService {
 
         SocialUserInfo userInfo = new SocialUserInfo(kakaoId, nickName, email);
         return userInfo;
-    }
-
-    public SocialLoginUser save(SocialUserInfo userInfo) {
-        SocialLoginUser user = modelMapper.map(userInfo, SocialLoginUser.class);
-        user.updateUserRole(UserRole.BUYER);
-
-        return socialUserRepository.save(user);
     }
 }
