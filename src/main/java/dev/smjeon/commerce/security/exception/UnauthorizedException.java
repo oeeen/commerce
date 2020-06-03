@@ -9,6 +9,6 @@ public class UnauthorizedException extends RuntimeException {
 
     public UnauthorizedException() {
         super(MESSAGE);
-        logger.debug("인증 실패");
+        logger.debug(MESSAGE);
     }
 }
