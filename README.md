@@ -17,10 +17,9 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - H2, MySQL
 - thymeleaf
 
-## 현재 가장 중요한 이슈 (2020/06/01)
+## 현재 가장 중요한 이슈 (2020/06/03)
 
 - Security 적용 이후 유저 권한 관련 테스트
-- OAuth, Security package refactoring, 단위 테스트 추가
 
 ### 기능 구현 목록 (프로젝트 관리와 이슈 추가 하면서 업데이트)
 
