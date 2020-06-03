@@ -34,13 +34,7 @@ public abstract class SocialLoginAuthenticationProvider implements Authenticatio
         SocialLoginUser user = socialUserRepository.findByOauthId(userInfo.getOauthId())
                 .orElseGet(() -> save(userInfo));
 
-        UserContext userContext = new UserContext(
-                user.getId(),
-                user.getOauthId(),
-                user.getNickName().getNickName(),
-                user.getUserRole());
-
-        return new SocialPostAuthorizationToken(userContext);
+        return new SocialPostAuthorizationToken(getUserContext(user));
     }
 
     private SocialLoginUser save(SocialUserInfo userInfo) {
@@ -48,5 +42,13 @@ public abstract class SocialLoginAuthenticationProvider implements Authenticatio
         user.updateUserRole(UserRole.BUYER);
 
         return socialUserRepository.save(user);
+    }
+
+    private UserContext getUserContext(SocialLoginUser user) {
+        return new UserContext(
+                    user.getId(),
+                    user.getOauthId(),
+                    user.getNickName().getNickName(),
+                    user.getUserRole());
     }
 }
