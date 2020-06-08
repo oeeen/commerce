@@ -5,9 +5,6 @@ import dev.smjeon.commerce.category.domain.SubCategory;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
 import dev.smjeon.commerce.category.repository.CategoryRepository;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package dev.smjeon.commerce.category.dto;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
