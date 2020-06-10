@@ -76,10 +76,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest().permitAll();
+        http
+                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**")
+                .and()
+                .cors();
 
         http
-                .csrf().disable()
-                .cors();
+                .headers()
+                .frameOptions().disable();
 
         http
                 .addFilterBefore(kakaoLoginFilter(), UsernamePasswordAuthenticationFilter.class)
