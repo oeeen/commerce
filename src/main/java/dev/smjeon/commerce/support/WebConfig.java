@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.support;
 
 import dev.smjeon.commerce.oauth.common.SocialProviderConverter;
+import dev.smjeon.commerce.product.converter.ProductTypeConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new SocialProviderConverter());
+        registry.addConverter(new ProductTypeConverter());
     }
 }

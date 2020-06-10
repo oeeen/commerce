@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.product.presentation;
 
 import dev.smjeon.commerce.product.application.ProductService;
+import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,8 @@ public class ProductApi {
         return ResponseEntity.ok(productService.findByCategory(categoryId));
     }
 
-    @GetMapping("/event")
-    public ResponseEntity<List<ProductResponse>> findAllEventProducts() {
-        return ResponseEntity.ok(productService.findAllEventProducts());
+    @GetMapping("/{type}")
+    public ResponseEntity<List<ProductResponse>> findAllByProductType(@PathVariable ProductType type) {
+        return ResponseEntity.ok(productService.findAllByProductType(type));
     }
 }

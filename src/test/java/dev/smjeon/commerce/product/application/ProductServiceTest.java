@@ -59,7 +59,7 @@ class ProductServiceTest {
     void findAllEventProduct() {
         given(productRepository.findAllByType(any(ProductType.class))).willReturn(Collections.singletonList(mock(Product.class)));
 
-        productService.findAllEventProducts();
+        productService.findAllByProductType(ProductType.EVENT);
 
         verify(productRepository).findAllByType(ProductType.EVENT);
         verify(productRepository, times(0)).findAllByType(ProductType.NORMAL);

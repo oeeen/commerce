@@ -40,8 +40,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductResponse> findAllEventProducts() {
-        List<Product> products = productRepository.findAllByType(ProductType.EVENT);
+    public List<ProductResponse> findAllByProductType(ProductType type) {
+        List<Product> products = productRepository.findAllByType(type);
 
         return products.stream()
                 .map(ProductConverter::toDto)
