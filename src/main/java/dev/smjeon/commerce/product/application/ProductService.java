@@ -3,6 +3,7 @@ package dev.smjeon.commerce.product.application;
 import dev.smjeon.commerce.category.application.CategoryInternalService;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.product.domain.Product;
+import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,14 @@ public class ProductService {
     public List<ProductResponse> findByCategory(Long categoryId) {
         TopCategory category = categoryInternalService.findById(categoryId);
         List<Product> products = productRepository.findAllByTopCategory(category);
+
+        return products.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductResponse> findAllEventProducts() {
+        List<Product> products = productRepository.findAllByType(ProductType.EVENT);
 
         return products.stream()
                 .map(this::toDto)

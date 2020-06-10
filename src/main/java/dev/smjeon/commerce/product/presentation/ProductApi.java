@@ -29,4 +29,9 @@ public class ProductApi {
     public ResponseEntity<List<ProductResponse>> findByCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok(productService.findByCategory(categoryId));
     }
+
+    @GetMapping("/event")
+    public ResponseEntity<List<ProductResponse>> findAllEventProducts() {
+        return ResponseEntity.ok(productService.findAllEventProducts());
+    }
 }
