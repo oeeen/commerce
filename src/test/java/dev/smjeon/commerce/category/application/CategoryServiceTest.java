@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
@@ -38,6 +39,21 @@ class CategoryServiceTest {
 
         List<CategoryResponse> categoryResponses = categoryService.findAll();
         CategoryResponse response = categoryResponses.get(0);
+
+        assertEquals(response.getTopCategory(), "최상위카테고리");
+        assertEquals(response.getSubCategory(), "중간카테고리");
+        assertEquals(response.getLowestCategory(), "최하위카테고리");
+    }
+
+    @Test
+    @DisplayName("카테고리 Id로 조회가 가능합니다.")
+    void findById() {
+        LowestCategory lowestCategory = new LowestCategory(new CategoryName("최하위카테고리"));
+        SubCategory subCategory = new SubCategory(new CategoryName("중간카테고리"), lowestCategory);
+        TopCategory category = new TopCategory(new CategoryName("최상위카테고리"), subCategory);
+        given(categoryInternalService.findById(anyLong())).willReturn(category);
+
+        CategoryResponse response = categoryService.findById(10L);
 
         assertEquals(response.getTopCategory(), "최상위카테고리");
         assertEquals(response.getSubCategory(), "중간카테고리");
