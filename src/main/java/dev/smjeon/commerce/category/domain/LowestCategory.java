@@ -23,4 +23,8 @@ public class LowestCategory {
     public LowestCategory(CategoryName name) {
         this.name = name;
     }
+
+    public String getCategoryNameValue() {
+        return this.name.getValue();
+    }
 }

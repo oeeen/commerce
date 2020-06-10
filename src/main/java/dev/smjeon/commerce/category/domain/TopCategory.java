@@ -28,4 +28,16 @@ public class TopCategory extends BaseEntity {
         this.name = name;
         this.subCategory = subCategory;
     }
+
+    public String getCategoryNameValue() {
+        return this.name.getValue();
+    }
+
+    public String getSubCategoryValue() {
+        return this.subCategory.getCategoryNameValue();
+    }
+
+    public String getLowestCategoryValue() {
+        return this.subCategory.getLowestCategoryValue();
+    }
 }

@@ -27,4 +27,12 @@ public class SubCategory {
         this.name = name;
         this.lowestCategory = lowestCategory;
     }
+
+    public String getCategoryNameValue() {
+        return this.name.getValue();
+    }
+
+    public String getLowestCategoryValue() {
+        return this.lowestCategory.getCategoryNameValue();
+    }
 }
