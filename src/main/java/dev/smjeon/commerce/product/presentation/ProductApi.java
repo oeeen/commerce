@@ -4,6 +4,7 @@ import dev.smjeon.commerce.product.application.ProductService;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,10 @@ public class ProductApi {
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @GetMapping("/categories/{categoryId}")
+    public ResponseEntity<List<ProductResponse>> findByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(productService.findByCategory(categoryId));
     }
 }

@@ -1,5 +1,7 @@
 package dev.smjeon.commerce.product.application;
 
+import dev.smjeon.commerce.category.application.CategoryInternalService;
+import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.product.domain.Product;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.repository.ProductRepository;
@@ -12,13 +14,24 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryInternalService categoryInternalService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryInternalService categoryInternalService) {
         this.productRepository = productRepository;
+        this.categoryInternalService = categoryInternalService;
     }
 
     public List<ProductResponse> findAll() {
         List<Product> products = productRepository.findAll();
+
+        return products.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductResponse> findByCategory(Long categoryId) {
+        TopCategory category = categoryInternalService.findById(categoryId);
+        List<Product> products = productRepository.findAllByTopCategory(category);
 
         return products.stream()
                 .map(this::toDto)
