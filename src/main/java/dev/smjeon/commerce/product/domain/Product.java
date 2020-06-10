@@ -42,4 +42,36 @@ public class Product extends BaseEntity {
         this.price = price;
         this.shippingFee = shippingFee;
     }
+
+    public String getTopCategoryValue() {
+        return this.topCategory.getCategoryNameValue();
+    }
+
+    public String getSubCategoryValue() {
+        return this.topCategory.getSubCategoryValue();
+    }
+
+    public String getLowestCategoryValue() {
+        return this.topCategory.getLowestCategoryValue();
+    }
+
+    public String getBrandNameValue() {
+        return this.name.getBrandName();
+    }
+
+    public String getProductNameValue() {
+        return this.name.getProductName();
+    }
+
+    public int getPriceValue() {
+        return this.price.getValue();
+    }
+
+    public int getShippingFeeValue() {
+        return this.shippingFee.getValue();
+    }
+
+    public boolean isEventType() {
+        return ProductType.EVENT.equals(this.type);
+    }
 }
