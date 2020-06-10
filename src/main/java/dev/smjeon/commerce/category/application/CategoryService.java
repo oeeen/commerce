@@ -1,10 +1,7 @@
 package dev.smjeon.commerce.category.application;
 
-import dev.smjeon.commerce.category.domain.LowestCategory;
-import dev.smjeon.commerce.category.domain.SubCategory;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
-import dev.smjeon.commerce.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,25 +9,29 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
-    private final CategoryRepository categoryRepository;
+    private final CategoryInternalService categoryInternalService;
 
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryService(CategoryInternalService categoryInternalService) {
+        this.categoryInternalService = categoryInternalService;
     }
 
     public List<CategoryResponse> findAll() {
-        List<TopCategory> categories = categoryRepository.findAll();
+        List<TopCategory> categories = categoryInternalService.findAll();
 
         return categories.stream()
-                .map(category -> {
-                    SubCategory subCategory = category.getSubCategory();
-                    LowestCategory lowestCategory = subCategory.getLowestCategory();
-                    return new CategoryResponse(
-                            category.getName().getValue(),
-                            subCategory.getName().getValue(),
-                            lowestCategory.getName().getValue()
-                    );
-                })
+                .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private CategoryResponse toDto(TopCategory topCategory) {
+        return new CategoryResponse(
+                topCategory.getCategoryNameValue(),
+                topCategory.getSubCategoryValue(),
+                topCategory.getLowestCategoryValue()
+        );
+    }
+
+    public CategoryResponse findById(Long id) {
+        return toDto(categoryInternalService.findById(id));
     }
 }
