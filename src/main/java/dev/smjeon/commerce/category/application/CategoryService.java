@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.category.application;
 
+import dev.smjeon.commerce.category.converter.CategoryConverter;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,11 @@ public class CategoryService {
         List<TopCategory> categories = categoryInternalService.findAll();
 
         return categories.stream()
-                .map(this::toDto)
+                .map(CategoryConverter::toDto)
                 .collect(Collectors.toList());
     }
 
-    private CategoryResponse toDto(TopCategory topCategory) {
-        return new CategoryResponse(
-                topCategory.getCategoryNameValue(),
-                topCategory.getSubCategoryValue(),
-                topCategory.getLowestCategoryValue()
-        );
-    }
-
     public CategoryResponse findById(Long id) {
-        return toDto(categoryInternalService.findById(id));
+        return CategoryConverter.toDto(categoryInternalService.findById(id));
     }
 }

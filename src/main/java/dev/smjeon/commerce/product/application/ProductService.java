@@ -2,6 +2,7 @@ package dev.smjeon.commerce.product.application;
 
 import dev.smjeon.commerce.category.application.CategoryInternalService;
 import dev.smjeon.commerce.category.domain.TopCategory;
+import dev.smjeon.commerce.product.converter.ProductConverter;
 import dev.smjeon.commerce.product.domain.Product;
 import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductResponse;
@@ -26,7 +27,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
 
         return products.stream()
-                .map(this::toDto)
+                .map(ProductConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +36,7 @@ public class ProductService {
         List<Product> products = productRepository.findAllByTopCategory(category);
 
         return products.stream()
-                .map(this::toDto)
+                .map(ProductConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -43,18 +44,7 @@ public class ProductService {
         List<Product> products = productRepository.findAllByType(ProductType.EVENT);
 
         return products.stream()
-                .map(this::toDto)
+                .map(ProductConverter::toDto)
                 .collect(Collectors.toList());
-    }
-
-    private ProductResponse toDto(Product product) {
-        return new ProductResponse(product.getBrandNameValue(),
-                product.getProductNameValue(),
-                product.getTopCategoryValue(),
-                product.getSubCategoryValue(),
-                product.getLowestCategoryValue(),
-                product.getPriceValue(),
-                product.getShippingFeeValue()
-        );
     }
 }
