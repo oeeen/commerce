@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.user.presentation;
 
+import dev.smjeon.commerce.common.TestTemplate;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;

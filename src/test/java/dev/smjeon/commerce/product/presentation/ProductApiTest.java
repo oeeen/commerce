@@ -1,6 +1,6 @@
 package dev.smjeon.commerce.product.presentation;
 
-import dev.smjeon.commerce.user.presentation.TestTemplate;
+import dev.smjeon.commerce.common.TestTemplate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;

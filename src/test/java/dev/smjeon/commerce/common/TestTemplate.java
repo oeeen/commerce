@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.user.presentation;
+package dev.smjeon.commerce.common;
 
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
