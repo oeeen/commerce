@@ -70,6 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+
+        web
+                .ignoring().requestMatchers(PathRequest.toH2Console());
     }
 
     @Override
@@ -84,13 +87,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
                 .antMatchers("/", "/api/users/signin", "/api/users/signup", "/login", "/login/**", "/signup").permitAll()
                 .antMatchers("/api/products/**").permitAll()
-                .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
                 .anyRequest().authenticated();
 
         http
-                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**")
+                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")
                 .and()
                 .cors();
 
