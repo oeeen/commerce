@@ -93,7 +93,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http
-                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**")
+                .csrf()
+                .ignoringRequestMatchers(PathRequest.toH2Console())
+                .ignoringAntMatchers("/api/users/**")
                 .and()
                 .cors();
 
