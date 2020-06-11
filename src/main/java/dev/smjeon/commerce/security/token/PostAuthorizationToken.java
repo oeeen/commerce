@@ -20,6 +20,6 @@ public class PostAuthorizationToken extends UsernamePasswordAuthenticationToken 
     }
 
     private static Collection<? extends GrantedAuthority> parseAuthorities(UserRole role) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
 }
