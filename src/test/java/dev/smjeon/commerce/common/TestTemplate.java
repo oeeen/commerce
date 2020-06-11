@@ -1,4 +1,4 @@
-package dev.smjeon.commerce.user.presentation;
+package dev.smjeon.commerce.common;
 
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
@@ -18,7 +18,9 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.config.location=classpath:oauth.yml")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"spring.config.location=classpath:oauth.yml",
+                "spring.config.location=classpath:application.yml"})
 public class TestTemplate {
 
     @Autowired
@@ -33,6 +35,11 @@ public class TestTemplate {
 
     protected UserLoginRequest userLoginRequest = new UserLoginRequest(
             new Email("test@gmail.com"),
+            new Password("Aa12345!")
+    );
+
+    protected UserLoginRequest adminLoginRequest = new UserLoginRequest(
+            new Email("oeeen3@gmail.com"),
             new Password("Aa12345!")
     );
 

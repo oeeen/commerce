@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.smjeon.commerce.user.exception.InvalidEmailException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 public class Email {
     private static final String PATTERN = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}";
 
+    @JsonIgnore
     @Transient
     private final Pattern pattern = Pattern.compile(PATTERN);
 
