@@ -2,6 +2,7 @@ package dev.smjeon.commerce.user.application;
 
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.domain.Email;
+import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
@@ -15,7 +16,9 @@ import dev.smjeon.commerce.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,17 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
+    @PostConstruct
+    private void addAdmin() {
+        User user = new User(new Email("oeeen3@gmail.com"),
+                new Password(passwordEncoder.encode("Aa12345!")),
+                "Seongmo",
+                new NickName("Martin"),
+                UserRole.ADMIN);
+
+        userRepository.save(user);
+    }
+
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -44,6 +58,7 @@ public class UserService {
         return modelMapper.map(user, UserContext.class);
     }
 
+    @Transactional
     public UserResponse save(UserSignUpRequest userSignUpRequest) {
         checkDuplicatedEmail(userSignUpRequest);
         String encodedPassword = passwordEncoder.encode(userSignUpRequest.getPassword().getValue());
