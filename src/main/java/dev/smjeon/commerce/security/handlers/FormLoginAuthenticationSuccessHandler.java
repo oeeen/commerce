@@ -4,6 +4,8 @@ import dev.smjeon.commerce.security.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,11 @@ public class FormLoginAuthenticationSuccessHandler implements AuthenticationSucc
     @Override
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
             throws IOException, ServletException {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+
         HttpSession httpSession = req.getSession();
         UserContext userContext = (UserContext) auth.getPrincipal();
         httpSession.setAttribute(LOGIN_SESSION_ATTRIBUTE, userContext);
