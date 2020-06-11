@@ -38,6 +38,11 @@ public class TestTemplate {
             new Password("Aa12345!")
     );
 
+    protected UserLoginRequest adminLoginRequest = new UserLoginRequest(
+            new Email("oeeen3@gmail.com"),
+            new Password("Aa12345!")
+    );
+
     protected void register(UserSignUpRequest userSignUpRequest) {
         webTestClient.post()
                 .uri("/api/users/signup")
