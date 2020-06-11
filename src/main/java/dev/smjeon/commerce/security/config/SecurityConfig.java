@@ -70,9 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-
-        web
-                .ignoring().requestMatchers(PathRequest.toH2Console());
     }
 
     @Override
@@ -93,9 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http
-                .csrf()
-                .ignoringRequestMatchers(PathRequest.toH2Console())
-                .ignoringAntMatchers("/api/users/**")
+                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**")
                 .and()
                 .cors();
 
