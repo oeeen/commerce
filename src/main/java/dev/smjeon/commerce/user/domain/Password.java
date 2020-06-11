@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.smjeon.commerce.user.exception.InvalidPasswordException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 public class Password {
     private static final String PATTERN = ".*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*";
 
+    @JsonIgnore
     @Transient
     private final Pattern pattern = Pattern.compile(PATTERN);
 
