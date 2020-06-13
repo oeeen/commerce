@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/login.css">
     <title>로그인</title>
 </head>
@@ -15,6 +16,9 @@
                 </a>
             </h1>
         </header>
+        <div th:if="${param.error}" class="form-group">
+            <span th:text="${param.exception}" class="alert alert-danger"></span>
+        </div>
         <form class="login-form" method="post" th:action="@{/api/users/signin}">
             <div id="login_content">
                 <label class="login-wrap" for="login-email-input">
