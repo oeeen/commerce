@@ -30,9 +30,9 @@
             <a class="nav-link" href="/login">로그인</a>
           </li>
           <li sec:authorize="isAuthenticated()" class="nav-item">
-            <a class="nav-link" href="/logout">로그아웃</a>
+            <a class="nav-link" id="logout-btn" style="cursor:pointer">로그아웃</a>
           </li>
-          <li class="nav-item">
+          <li sec:authorize="isAnonymous()" class="nav-item">
             <a class="nav-link" href="/signup">회원가입</a>
           </li>
           <li class="nav-item">
@@ -202,6 +202,8 @@
 
   <script src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.bundle.min.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/common.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/logout.js"></script>
 
 </body>
 
