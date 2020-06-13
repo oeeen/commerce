@@ -3,6 +3,7 @@ package dev.smjeon.commerce.security.config;
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.GithubLoginFilter;
 import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
+import dev.smjeon.commerce.security.handlers.CustomLogoutSuccessHandler;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
 import dev.smjeon.commerce.user.domain.UserRole;
@@ -96,7 +97,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/api/users/signin")
                 .defaultSuccessUrl("/")
-                .permitAll();
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/api/users/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler());
 
         http
                 .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")
