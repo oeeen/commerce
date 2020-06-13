@@ -19,7 +19,7 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 
 ## 현재 가장 중요한 이슈 (2020/06/13)
 
-- Logout Test, 인증 상태에 따른 html 값 변경 확인 테스트
+- Logout Test
 - 사용자 권한 계층적 관리
 - 사용자 권한에 따른 api call 제한
 - WithMockCustomUser Annotation 적용 방법?
