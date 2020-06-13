@@ -23,4 +23,13 @@ public class UserController {
     public String showSignUpPage() {
         return "signup";
     }
+
+    @GetMapping("/denied")
+    public ModelAndView accessDenied(@RequestParam(value = "exception", required = false) String exception,
+                                     ModelAndView mav) {
+        mav.addObject("exception", exception);
+        mav.setViewName("/denied");
+
+        return mav;
+    }
 }

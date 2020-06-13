@@ -17,11 +17,10 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - H2, MySQL
 - thymeleaf
 
-## 현재 가장 중요한 이슈 (2020/06/13)
+## 현재 가장 중요한 이슈 (2020/06/14)
 
 - Logout Test
 - 사용자 권한 계층적 관리
-- 사용자 권한에 따른 api call 제한
 - WithMockCustomUser Annotation 적용 방법?
     - TestSecurityContextHolder 의 TestSecurityContext 내부의 Authentication 까지 들어오는 것은 확인했음
     - 그 다음 request가 anonymous로 빠지는 이유가 뭔지 모르겠음. FilterInterceptor에서 SecurityContext 확인해보면 Authentication이 null임
@@ -61,7 +60,7 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
     - 필터
         - [ ] 세션 제어 필터
         - [ ] csrf 필터
-    - [ ] 인증 거부 처리
+    - [x] 인가 거부 처리
     - [ ] 사용자 권한 계층 처리
         - ROLE_ADMIN > ROLE_SELLER > ROLE_BUYER
     - [ ] 회원 탈퇴 기능

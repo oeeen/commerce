@@ -31,6 +31,22 @@ public class UserApiControllerTest extends TestTemplate {
     }
 
     @Test
+    @DisplayName("부족한 권한(일반 사용자)으로 유저 리스트를 요청하면 access denied 페이지로 리다이렉트 됩니다.")
+    void showUsersWithInsufficientAuthority() {
+        String userName = "일반사용자";
+        Email email = new Email("normal@naver.com");
+        NickName nickName = new NickName("Normal");
+        Password password = new Password("aA12345!");
+        UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
+        register(userSignUpRequest);
+
+        loginAndRequest(HttpMethod.GET, "/api/users", Void.class, HttpStatus.FOUND,
+                loginSessionId(userSignUpRequest.getEmail(), userSignUpRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+    }
+
+    @Test
     @DisplayName("권한 없이 유저리스트를 요청하면 로그인 페이지로 리다이렉트 됩니다.")
     void showUsersWithoutAuth() {
         request(HttpMethod.GET, "/api/users", Void.class, HttpStatus.FOUND)
