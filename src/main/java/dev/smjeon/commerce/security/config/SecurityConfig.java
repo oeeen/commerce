@@ -3,6 +3,7 @@ package dev.smjeon.commerce.security.config;
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.GithubLoginFilter;
 import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
+import dev.smjeon.commerce.security.handlers.CustomAccessDeniedHandler;
 import dev.smjeon.commerce.security.handlers.CustomLogoutSuccessHandler;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -67,6 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
@@ -105,7 +112,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .logoutSuccessHandler(new CustomLogoutSuccessHandler());
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
+        ;
 
         http
                 .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")
