@@ -19,8 +19,9 @@ import java.util.Objects;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"spring.config.location=classpath:oauth.yml",
-                "spring.config.location=classpath:application.yml"})
+        properties = "spring.config.location=" +
+                "classpath:oauth.yml," +
+                "classpath:application.yml")
 public class TestTemplate {
 
     @Autowired
