@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -25,8 +26,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <li sec:authorize="!isAuthenticated()" class="nav-item">
             <a class="nav-link" href="/login">로그인</a>
+          </li>
+          <li sec:authorize="isAuthenticated()" class="nav-item">
+            <a class="nav-link" href="/logout">로그아웃</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/signup">회원가입</a>
