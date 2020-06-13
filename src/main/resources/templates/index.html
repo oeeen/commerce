@@ -26,7 +26,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li sec:authorize="!isAuthenticated()" class="nav-item">
+          <li sec:authorize="isAnonymous()" class="nav-item">
             <a class="nav-link" href="/login">로그인</a>
           </li>
           <li sec:authorize="isAuthenticated()" class="nav-item">
