@@ -88,9 +88,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
-                .antMatchers("/", "/api/users/signin", "/api/users/signup", "/login", "/login/**", "/signup").permitAll()
+                .antMatchers("/", "/api/users/signup", "/login/**", "/signup").permitAll()
                 .antMatchers("/api/products/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/api/users/signin")
+                .defaultSuccessUrl("/")
+                .permitAll();
 
         http
                 .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")
