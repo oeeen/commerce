@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/login.css">
@@ -15,7 +15,7 @@
                 </a>
             </h1>
         </header>
-        <form class="login-form" method="post" action="/api/users/signin">
+        <form class="login-form" method="post" th:action="@{/api/users/signin}">
             <div id="login_content">
                 <label class="login-wrap" for="login-email-input">
                     <span class="login-input-group login-input-group-icon">

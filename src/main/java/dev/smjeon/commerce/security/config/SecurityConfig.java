@@ -3,6 +3,7 @@ package dev.smjeon.commerce.security.config;
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.GithubLoginFilter;
 import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
+import dev.smjeon.commerce.security.handlers.CustomLogoutSuccessHandler;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
 import dev.smjeon.commerce.user.domain.UserRole;
@@ -88,9 +89,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
-                .antMatchers("/", "/api/users/signin", "/api/users/signup", "/login", "/login/**", "/signup").permitAll()
+                .antMatchers("/", "/api/users/signup", "/login/**", "/signup").permitAll()
                 .antMatchers("/api/products/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/api/users/signin")
+                .defaultSuccessUrl("/")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/api/users/logout")
+                .logoutSuccessUrl("/")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler());
 
         http
                 .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")

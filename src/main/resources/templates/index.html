@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -25,14 +26,20 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+          <li sec:authorize="isAnonymous()" class="nav-item">
             <a class="nav-link" href="/login">로그인</a>
           </li>
-          <li class="nav-item">
+          <li sec:authorize="isAuthenticated()" class="nav-item">
+            <a class="nav-link" id="logout-btn" style="cursor:pointer">로그아웃</a>
+          </li>
+          <li sec:authorize="isAnonymous()" class="nav-item">
             <a class="nav-link" href="/signup">회원가입</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">문의</a>
+          </li>
+          <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+            <a class="nav-link" href="/api/users">회원 조회</a>
           </li>
         </ul>
       </div>
@@ -195,6 +202,8 @@
 
   <script src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.bundle.min.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/common.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/logout.js"></script>
 
 </body>
 
