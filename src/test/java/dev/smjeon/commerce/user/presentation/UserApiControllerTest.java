@@ -5,6 +5,7 @@ import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -30,9 +31,11 @@ public class UserApiControllerTest extends TestTemplate {
     }
 
     @Test
-    @DisplayName("권한 없이 유저리스트를 요청하면 거절됩니다.")
+    @DisplayName("권한 없이 유저리스트를 요청하면 로그인 페이지로 리다이렉트 됩니다.")
     void showUsersWithoutAuth() {
-        respondApi(request(HttpMethod.GET, "/api/users", Void.class, HttpStatus.FORBIDDEN));
+        request(HttpMethod.GET, "/api/users", Void.class, HttpStatus.FOUND)
+                .expectHeader()
+                .value("Location", Matchers.containsString("/login"));
     }
 
     @Test
