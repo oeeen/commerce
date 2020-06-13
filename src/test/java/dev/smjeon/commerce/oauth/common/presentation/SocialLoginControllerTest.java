@@ -11,7 +11,7 @@ class SocialLoginControllerTest extends TestTemplate {
     @Test
     @DisplayName("kakao 로그인 시 해당 url로 redirect됩니다.")
     void kakaoLoginRedirect() {
-        request(HttpMethod.GET, "/login/kakao", Void.class, HttpStatus.FOUND)
+        request(HttpMethod.GET, "/login/social/kakao", Void.class, HttpStatus.FOUND)
                 .expectHeader()
                 .value("Location", Matchers.containsString("/oauth/kakao"));
     }
@@ -19,7 +19,7 @@ class SocialLoginControllerTest extends TestTemplate {
     @Test
     @DisplayName("github 로그인 시 해당 url로 redirect됩니다.")
     void githubLoginRedirect() {
-        request(HttpMethod.GET, "/login/github", Void.class, HttpStatus.FOUND)
+        request(HttpMethod.GET, "/login/social/github", Void.class, HttpStatus.FOUND)
                 .expectHeader()
                 .value("Location", Matchers.containsString("/oauth/github"));
     }

@@ -18,7 +18,7 @@ public class SocialLoginController {
         this.githubLoginService = githubLoginService;
     }
 
-    @GetMapping("/login/{socialProvider}")
+    @GetMapping("/login/social/{socialProvider}")
     public RedirectView loginWithSocial(@PathVariable SocialProviders socialProvider) {
         if (SocialProviders.KAKAO.equals(socialProvider)) {
             return new RedirectView(kakaoLoginService.getRedirectUrl());
