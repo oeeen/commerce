@@ -17,7 +17,7 @@ public class UserTest {
         Email email = new Email("oeeen3@gmail.com");
         Password password = new Password("Aa12345!");
 
-        assertDoesNotThrow(() -> new User(email, password, name, nickName, UserRole.BUYER));
+        assertDoesNotThrow(() -> new User(email, password, name, nickName, UserRole.BUYER, UserStatus.ACTIVE));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class UserTest {
         Email email = new Email("oeeen3@gmail.com");
         Password password = new Password("Aa12345!");
 
-        User user = new User(email, password, name, nickName, UserRole.BUYER);
+        User user = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.ACTIVE);
         user.updateGender(gender);
         user.updateAge(age);
         user.updateBirthday(birthday);

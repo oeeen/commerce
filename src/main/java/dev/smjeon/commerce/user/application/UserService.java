@@ -6,6 +6,7 @@ import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
+import dev.smjeon.commerce.user.domain.UserStatus;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
@@ -40,7 +41,8 @@ public class UserService {
                 new Password(passwordEncoder.encode("Aa12345!")),
                 "Seongmo",
                 new NickName("Martin"),
-                UserRole.ADMIN);
+                UserRole.ADMIN,
+                UserStatus.ACTIVE);
 
         userRepository.save(user);
     }
@@ -64,7 +66,7 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(userSignUpRequest.getPassword().getValue());
 
         User user = new User(userSignUpRequest.getEmail(), new Password(encodedPassword),
-                userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER);
+                userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER, UserStatus.ACTIVE);
 
         userRepository.save(user);
 
