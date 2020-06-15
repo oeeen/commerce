@@ -57,4 +57,15 @@ public class UserTest {
 
         assertFalse(user.isActive());
     }
+
+    @Test
+    @DisplayName("현재 계정 상태를 Inactive 에서 activate 가능합니다.")
+    void deactivateUser() {
+        User user = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.INACTIVE);
+        assertFalse(user.isActive());
+
+        user.activate();
+
+        assertTrue(user.isActive());
+    }
 }
