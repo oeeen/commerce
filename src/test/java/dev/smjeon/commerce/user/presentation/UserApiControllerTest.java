@@ -98,12 +98,36 @@ public class UserApiControllerTest extends TestTemplate {
         Password password = new Password("aA12345!");
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
 
+        deactivateUser(userSignUpRequest);
+    }
 
+    @Test
+    @DisplayName("비활성화된 회원은 로그인이 불가능합니다.(인증 실패) 로그인 페이지로 리다이렉트 됩니다.")
+    void withdrawWithDeactivatedUser() {
+        String userName = "회원탈퇴2";
+        Email email = new Email("withdraw2@gmail.com");
+        NickName nickName = new NickName("Seongmo");
+        Password password = new Password("aA12345!");
+        UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
+
+        deactivateUser(userSignUpRequest);
+
+        webTestClient.post()
+                .uri("/api/users/signin")
+                .exchange()
+                .expectStatus()
+                .isFound()
+                .expectHeader()
+                .value("Location", Matchers.containsString("/login"));
+    }
+
+    private void deactivateUser(UserSignUpRequest userSignUpRequest) {
         UserResponse userResponse = request(HttpMethod.POST, "/api/users/signup", userSignUpRequest, HttpStatus.OK)
                 .expectBody(UserResponse.class)
                 .returnResult()
                 .getResponseBody();
+
         loginAndRequest(HttpMethod.DELETE, "/api/users/" + userResponse.getId(), Void.class,
-                HttpStatus.NO_CONTENT, loginSessionId(email, password));
+                HttpStatus.NO_CONTENT, loginSessionId(userSignUpRequest.getEmail(), userSignUpRequest.getPassword()));
     }
 }
