@@ -32,4 +32,9 @@ public class UserController {
 
         return mav;
     }
+
+    @GetMapping("/users")
+    public String showUsers() {
+        return "users";
+    }
 }
