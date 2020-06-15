@@ -7,16 +7,18 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserTest {
+    private String name = "Seongmo";
+    private NickName nickName = new NickName("Martin");
+    private Email email = new Email("oeeen3@gmail.com");
+    private Password password = new Password("Aa12345!");
+
     @Test
     @DisplayName("유저를 새로 생성할 때는 이메일, 비밀번호, 실명, 닉네임이 필요합니다.")
     void constructUser() {
-        String name = "Seongmo";
-        NickName nickName = new NickName("Martin");
-        Email email = new Email("oeeen3@gmail.com");
-        Password password = new Password("Aa12345!");
-
         assertDoesNotThrow(() -> new User(email, password, name, nickName, UserRole.BUYER, UserStatus.ACTIVE));
     }
 
@@ -43,5 +45,16 @@ public class UserTest {
 
         user.updateGender(Gender.FEMALE);
         assertEquals(user.getGender(), Gender.FEMALE);
+    }
+
+    @Test
+    @DisplayName("현재 계정 상태를 Active 에서 deactivate 가능합니다.")
+    void isActive() {
+        User user = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.ACTIVE);
+        assertTrue(user.isActive());
+
+        user.deactivate();
+
+        assertFalse(user.isActive());
     }
 }
