@@ -2,6 +2,7 @@ package dev.smjeon.commerce.user.dto;
 
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
+import dev.smjeon.commerce.user.domain.UserRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +13,12 @@ public class UserResponse {
     private Email email;
     private String name;
     private NickName nickName;
+    private UserRole userRole;
 
-    public UserResponse(Email email, String name, NickName nickName) {
+    public UserResponse(Email email, String name, NickName nickName, UserRole userRole) {
         this.email = email;
         this.name = name;
         this.nickName = nickName;
+        this.userRole = userRole;
     }
 }
