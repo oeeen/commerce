@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.user.application;
 
 import dev.smjeon.commerce.security.UserContext;
+import dev.smjeon.commerce.user.converter.UserConverter;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
@@ -50,7 +51,7 @@ public class UserService {
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> modelMapper.map(user, UserResponse.class))
+                .map(UserConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +71,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return modelMapper.map(user, UserResponse.class);
+        return UserConverter.toDto(user);
     }
 
     private void checkDuplicatedEmail(UserSignUpRequest userSignUpRequest) {
@@ -85,7 +86,7 @@ public class UserService {
                         .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
 
         if (isCorrectPassword(userLoginRequest.getPassword(), user)) {
-            return modelMapper.map(user, UserResponse.class);
+            return UserConverter.toDto(user);
         }
 
         throw new InvalidPasswordException(userLoginRequest.getPassword().getValue());
