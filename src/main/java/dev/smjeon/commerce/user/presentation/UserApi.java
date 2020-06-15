@@ -5,7 +5,9 @@ import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +41,12 @@ public class UserApi {
         UserResponse loginUser = userService.login(userLoginRequest);
 
         return ResponseEntity.ok(loginUser);
+    }
+
+    @DeleteMapping("{userId}")
+    public ResponseEntity<Void> withdraw(@PathVariable Long userId) {
+        userService.withdraw(userId);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -84,7 +84,7 @@ public class UserService {
                 userRepository.findByEmail(userLoginRequest.getEmail())
                         .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
 
-        if (passwordEncoder.matches(userLoginRequest.getPassword().getValue(), user.getPassword().getValue())) {
+        if (isCorrectPassword(userLoginRequest.getPassword(), user)) {
             return modelMapper.map(user, UserResponse.class);
         }
 
@@ -93,5 +93,16 @@ public class UserService {
 
     public boolean isCorrectPassword(Password password, User user) {
         return passwordEncoder.matches(password.getValue(), user.getPassword().getValue());
+    }
+
+    @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserException(userId));
+        user.deactivate();
+    }
+
+    public boolean isActiveUser(User user) {
+        return user.isActive();
     }
 }

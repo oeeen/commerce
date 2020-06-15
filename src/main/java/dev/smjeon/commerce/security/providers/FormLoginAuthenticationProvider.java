@@ -34,9 +34,10 @@ public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundUserException(email.getEmail()));
 
-        if (userService.isCorrectPassword(password, user)) {
+        if (userService.isCorrectPassword(password, user) && userService.isActiveUser(user)) {
             return new PostAuthorizationToken(userService.findByEmail(email));
         }
+
         throw new UnauthorizedException();
     }
 

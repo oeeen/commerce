@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class UserResponse {
+    private Long id;
     private Email email;
     private String name;
     private NickName nickName;
     private UserRole userRole;
 
-    public UserResponse(Email email, String name, NickName nickName, UserRole userRole) {
+    public UserResponse(Long id, Email email, String name, NickName nickName, UserRole userRole) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.nickName = nickName;

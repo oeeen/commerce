@@ -11,4 +11,9 @@ public class NotFoundUserException extends RuntimeException {
         super(MESSAGE);
         logger.debug(MESSAGE + "들어온 입력: {}", userName);
     }
+
+    public NotFoundUserException(Long userId) {
+        super(MESSAGE);
+        logger.debug(MESSAGE + "들어온 ID: {}", userId);
+    }
 }

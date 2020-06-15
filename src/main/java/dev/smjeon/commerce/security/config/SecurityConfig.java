@@ -11,6 +11,7 @@ import dev.smjeon.commerce.user.domain.UserRole;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -95,7 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/users").hasRole(UserRole.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/api/users").authenticated()
                 .antMatchers("/", "/api/users/signup", "/login/**", "/login*", "/signup").permitAll()
                 .antMatchers("/api/categories").permitAll()
                 .antMatchers("/api/products/**").permitAll()

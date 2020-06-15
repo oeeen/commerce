@@ -61,4 +61,12 @@ public class User extends BaseEntity {
     public void updateBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
+
+    public void deactivate() {
+        this.userStatus = UserStatus.INACTIVE;
+    }
+
+    public boolean isActive() {
+        return UserStatus.ACTIVE.equals(this.userStatus);
+    }
 }

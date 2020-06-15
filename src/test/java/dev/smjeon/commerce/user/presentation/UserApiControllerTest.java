@@ -4,6 +4,7 @@ import dev.smjeon.commerce.common.TestTemplate;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
+import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
@@ -86,5 +87,23 @@ public class UserApiControllerTest extends TestTemplate {
                 .exchange()
                 .expectStatus()
                 .isFound();
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 계정이 Deactive 됩니다.")
+    void withdraw() {
+        String userName = "회원탈퇴";
+        Email email = new Email("withdraw@gmail.com");
+        NickName nickName = new NickName("Seongmo");
+        Password password = new Password("aA12345!");
+        UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, userName, nickName, password);
+
+
+        UserResponse userResponse = request(HttpMethod.POST, "/api/users/signup", userSignUpRequest, HttpStatus.OK)
+                .expectBody(UserResponse.class)
+                .returnResult()
+                .getResponseBody();
+        loginAndRequest(HttpMethod.DELETE, "/api/users/" + userResponse.getId(), Void.class,
+                HttpStatus.NO_CONTENT, loginSessionId(email, password));
     }
 }
