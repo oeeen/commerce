@@ -114,6 +114,8 @@ public class UserApiControllerTest extends TestTemplate {
 
         webTestClient.post()
                 .uri("/api/users/signin")
+                .body(BodyInserters.fromFormData("email", email.getEmail())
+                        .with("password", password.getValue()))
                 .exchange()
                 .expectStatus()
                 .isFound()
