@@ -13,6 +13,7 @@ public class UserConverter {
                 user.getEmail(),
                 user.getName(),
                 user.getNickName(),
-                user.getUserRole());
+                user.getUserRole(),
+                user.getUserStatus());
     }
 }
