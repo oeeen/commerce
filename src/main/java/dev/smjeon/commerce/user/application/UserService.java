@@ -11,6 +11,7 @@ import dev.smjeon.commerce.user.domain.UserStatus;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
+import dev.smjeon.commerce.user.dto.UserWithdrawRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
 import dev.smjeon.commerce.user.exception.InvalidPasswordException;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
@@ -105,5 +106,12 @@ public class UserService {
 
     public boolean isActiveUser(User user) {
         return user.isActive();
+    }
+
+    public boolean checkPassword(UserWithdrawRequest userWithdrawRequest) {
+        long id = userWithdrawRequest.getId();
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundUserException(id));
+
+        return passwordEncoder.matches(userWithdrawRequest.getPassword(), user.getPassword().getValue());
     }
 }
