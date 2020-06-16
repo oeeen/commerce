@@ -9,7 +9,7 @@ const template = (function () {
                                 {{nickname}}
                             </td>
                             <td class="text-center">
-                                <span class="label label-default">Inactive</span>
+                                <span class="label label-default">{{status}}</span>
                             </td>
                             <td>
                                 <a href="#">{{email}}</a>

@@ -4,8 +4,12 @@ import dev.smjeon.commerce.user.application.UserService;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
+import dev.smjeon.commerce.user.dto.UserWithdrawRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +43,22 @@ public class UserApi {
         UserResponse loginUser = userService.login(userLoginRequest);
 
         return ResponseEntity.ok(loginUser);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> withdraw(@PathVariable Long userId) {
+        userService.withdraw(userId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Boolean> checkPassword(@RequestBody UserWithdrawRequest userWithdrawRequest) {
+        boolean correctPassword = userService.checkPassword(userWithdrawRequest);
+        if (correctPassword) {
+            SecurityContextHolder.clearContext();
+        }
+
+        return ResponseEntity.ok(correctPassword);
     }
 }

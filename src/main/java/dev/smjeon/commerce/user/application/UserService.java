@@ -1,14 +1,17 @@
 package dev.smjeon.commerce.user.application;
 
 import dev.smjeon.commerce.security.UserContext;
+import dev.smjeon.commerce.user.converter.UserConverter;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
 import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
+import dev.smjeon.commerce.user.domain.UserStatus;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
+import dev.smjeon.commerce.user.dto.UserWithdrawRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
 import dev.smjeon.commerce.user.exception.InvalidPasswordException;
 import dev.smjeon.commerce.user.exception.NotFoundUserException;
@@ -40,7 +43,8 @@ public class UserService {
                 new Password(passwordEncoder.encode("Aa12345!")),
                 "Seongmo",
                 new NickName("Martin"),
-                UserRole.ADMIN);
+                UserRole.ADMIN,
+                UserStatus.ACTIVE);
 
         userRepository.save(user);
     }
@@ -48,7 +52,7 @@ public class UserService {
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> modelMapper.map(user, UserResponse.class))
+                .map(UserConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -64,11 +68,11 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(userSignUpRequest.getPassword().getValue());
 
         User user = new User(userSignUpRequest.getEmail(), new Password(encodedPassword),
-                userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER);
+                userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER, UserStatus.ACTIVE);
 
         userRepository.save(user);
 
-        return modelMapper.map(user, UserResponse.class);
+        return UserConverter.toDto(user);
     }
 
     private void checkDuplicatedEmail(UserSignUpRequest userSignUpRequest) {
@@ -82,8 +86,8 @@ public class UserService {
                 userRepository.findByEmail(userLoginRequest.getEmail())
                         .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
 
-        if (passwordEncoder.matches(userLoginRequest.getPassword().getValue(), user.getPassword().getValue())) {
-            return modelMapper.map(user, UserResponse.class);
+        if (isCorrectPassword(userLoginRequest.getPassword(), user)) {
+            return UserConverter.toDto(user);
         }
 
         throw new InvalidPasswordException(userLoginRequest.getPassword().getValue());
@@ -91,5 +95,23 @@ public class UserService {
 
     public boolean isCorrectPassword(Password password, User user) {
         return passwordEncoder.matches(password.getValue(), user.getPassword().getValue());
+    }
+
+    @Transactional
+    public void withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserException(userId));
+        user.deactivate();
+    }
+
+    public boolean isActiveUser(User user) {
+        return user.isActive();
+    }
+
+    public boolean checkPassword(UserWithdrawRequest userWithdrawRequest) {
+        long id = userWithdrawRequest.getId();
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundUserException(id));
+
+        return passwordEncoder.matches(userWithdrawRequest.getPassword(), user.getPassword().getValue());
     }
 }

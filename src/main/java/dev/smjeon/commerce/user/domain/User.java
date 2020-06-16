@@ -38,12 +38,16 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
 
-    public User(Email email, Password password, String name, NickName nickName, UserRole userRole) {
+    @Enumerated(value = EnumType.STRING)
+    private UserStatus userStatus;
+
+    public User(Email email, Password password, String name, NickName nickName, UserRole userRole, UserStatus userStatus) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickName = nickName;
         this.userRole = userRole;
+        this.userStatus = userStatus;
     }
 
     public void updateGender(Gender gender) {
@@ -56,5 +60,17 @@ public class User extends BaseEntity {
 
     public void updateBirthday(LocalDate birthday) {
         this.birthday = birthday;
+    }
+
+    public void deactivate() {
+        this.userStatus = UserStatus.INACTIVE;
+    }
+
+    public void activate() {
+        this.userStatus = UserStatus.ACTIVE;
+    }
+    
+    public boolean isActive() {
+        return UserStatus.ACTIVE.equals(this.userStatus);
     }
 }
