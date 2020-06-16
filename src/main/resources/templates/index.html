@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -203,28 +204,31 @@
       <p class="m-0 text-center text-white">Copyright &copy; SMJ Commerce 2020</p>
     </div>
   </footer>
-
-  <div class="modal fade" id="withdraw-modal" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5>회원 탈퇴 하시겠습니까?</h5>
-        </div>
-        <div class="modal-body">
-          <label class="password-wrap" for="login-password-input">
+  <div id="modal-container" sec:authorize="isAuthenticated()"
+       th:attr="data-userid=${#authentication.getPrincipal().id}">
+    <div class="modal fade" id="withdraw-modal" style="display: none;" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>회원 탈퇴 하시겠습니까?</h5>
+          </div>
+          <div class="modal-body">
+            <label class="password-wrap" for="withdraw-password-input">
                     <span class="password-input-group password-input-group-icon">
                         <img src="images/password.png" alt="password" class="password-icon"></span>
-            <span class="password-input-group">
-                        <input type="password" class="password-input" value="" name="password" id="login-password-input"
+              <span class="password-input-group">
+                        <input type="password" class="password-input" value="" name="password"
+                               id="withdraw-password-input"
                                placeholder="비밀번호 확인">
                     </span>
-          </label>
+            </label>
         </div>
-        <div class="modal-footer no-border">
-          <div class="text-right">
-            <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary btn-sm" id="update-btn" data-dismiss="modal">OK
-            </button>
+          <div class="modal-footer no-border">
+            <div class="text-right">
+              <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary btn-sm" id="withdraw-ok-btn" data-dismiss="modal">OK
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -233,8 +237,11 @@
 
   <script src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
   <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/common.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/template.js"></script>
   <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/logout.js"></script>
+  <script sec:authorize="isAuthenticated()" type="text/javascript" src="/js/users.js"></script>
 
 </body>
 
