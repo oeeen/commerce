@@ -17,7 +17,7 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - H2, MySQL
 - thymeleaf
 
-## 현재 가장 중요한 이슈 (2020/06/16)
+## 현재 이슈 (2020/06/16)
 
 - Logout Test
 - WithMockCustomUser Annotation 적용 방법?
@@ -60,14 +60,14 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
         - [ ] 세션 제어 필터
         - [ ] csrf 필터
     - [x] 인가 거부 처리
-    - [ ] 사용자 권한 계층 처리
+    - [x] 사용자 권한 계층 처리
         - ROLE_ADMIN > ROLE_SELLER > ROLE_BUYER
     - 유저 상태 필드 추가
         - Inactive, Active, Dormant
     - 마지막 로그인 시간 추가
         - 가입 직후에는 가입한 날짜로 설정
         - 마지막 로그인 이후 1년 -> 상태를 Dormant로 변경
-    - [ ] 회원 탈퇴 기능
+    - [x] 회원 탈퇴 기능
         - 탈퇴 시 User Status Inactive로, 평소 상태 Active
     - 내 정보 조회 기능
     - [x] 관리자(ROLE_ADMIN) 권한으로 전체 회원 정보 조회 가능
