@@ -4,5 +4,58 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/master/LICENSE)
  */
 body {
-  padding-top: 56px;
+    padding-top: 56px;
+}
+
+.password-input-group {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+}
+
+.password-input-group-icon {
+    position: relative;
+    float: left;
+    display: inline;
+    min-width: 44px;
+    _width: 44px;
+    height: 100%;
+    border-right: 1px solid #ccc;
+    background-color: #fafafa;
+    text-align: center;
+}
+
+.password-input {
+    margin: 0;
+    height: 46px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px 0 12px;
+    border: 0 none;
+    background: none transparent;
+    font-family: dotum, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #111;
+    font-weight: 700;
+    text-indent: 12px;
+}
+
+.password-wrap {
+    display: block;
+    position: relative;
+    height: 46px;
+    padding: 0;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: border-color .25s ease;
+}
+
+.password-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    background-size: 15px 15px;
+    margin: 16px;
 }

@@ -32,6 +32,10 @@
           <li sec:authorize="isAuthenticated()" class="nav-item">
             <a class="nav-link" id="logout-btn" style="cursor:pointer">로그아웃</a>
           </li>
+          <li sec:authorize="isAuthenticated()" class="nav-item">
+            <a class="nav-link" id="withdraw-btn" style="cursor:pointer" data-toggle="modal"
+               data-target="#withdraw-modal">회원탈퇴</a>
+          </li>
           <li sec:authorize="isAnonymous()" class="nav-item">
             <a class="nav-link" href="/signup">회원가입</a>
           </li>
@@ -199,6 +203,33 @@
       <p class="m-0 text-center text-white">Copyright &copy; SMJ Commerce 2020</p>
     </div>
   </footer>
+
+  <div class="modal fade" id="withdraw-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>회원 탈퇴 하시겠습니까?</h5>
+        </div>
+        <div class="modal-body">
+          <label class="password-wrap" for="login-password-input">
+                    <span class="password-input-group password-input-group-icon">
+                        <img src="images/password.png" alt="password" class="password-icon"></span>
+            <span class="password-input-group">
+                        <input type="password" class="password-input" value="" name="password" id="login-password-input"
+                               placeholder="비밀번호 확인">
+                    </span>
+          </label>
+        </div>
+        <div class="modal-footer no-border">
+          <div class="text-right">
+            <button class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary btn-sm" id="update-btn" data-dismiss="modal">OK
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.bundle.min.js"></script>
