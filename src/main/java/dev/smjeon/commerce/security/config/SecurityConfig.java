@@ -5,6 +5,7 @@ import dev.smjeon.commerce.security.factory.UrlResourcesMapFactoryBean;
 import dev.smjeon.commerce.security.filters.FormLoginFilter;
 import dev.smjeon.commerce.security.filters.GithubLoginFilter;
 import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
+import dev.smjeon.commerce.security.filters.PermitAllFilter;
 import dev.smjeon.commerce.security.handlers.CustomAccessDeniedHandler;
 import dev.smjeon.commerce.security.handlers.CustomLogoutSuccessHandler;
 import dev.smjeon.commerce.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
@@ -82,10 +83,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-//                .antMatchers("/api/users").hasRole(UserRole.ADMIN.name())
-//                .antMatchers("/", "/api/users/signup", "/login/**", "/login*", "/signup").permitAll()
-//                .antMatchers("/api/categories").permitAll()
-//                .antMatchers("/api/products/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -118,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(kakaoLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(githubLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
+                .addFilterBefore(permitAllFilter(), FilterSecurityInterceptor.class)
         ;
     }
 
@@ -152,13 +149,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
-        filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
-        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
-        filterSecurityInterceptor.setAuthenticationManager(super.authenticationManagerBean());
+    public PermitAllFilter permitAllFilter() throws Exception {
+        PermitAllFilter permitAllFilter = new PermitAllFilter();
+        permitAllFilter.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
+        permitAllFilter.setAccessDecisionManager(affirmativeBased());
+        permitAllFilter.setAuthenticationManager(super.authenticationManagerBean());
 
-        return filterSecurityInterceptor;
+        return permitAllFilter;
     }
 
     @Bean
