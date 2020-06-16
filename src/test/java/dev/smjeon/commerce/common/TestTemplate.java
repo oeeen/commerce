@@ -44,6 +44,16 @@ public class TestTemplate {
             new Password("Aa12345!")
     );
 
+    protected UserLoginRequest sellerLoginRequest = new UserLoginRequest(
+            new Email("seller@gmail.com"),
+            new Password("Aa12345!")
+    );
+
+    protected UserLoginRequest buyerLoginRequest = new UserLoginRequest(
+            new Email("buyer@gmail.com"),
+            new Password("Aa12345!")
+    );
+
     protected void register(UserSignUpRequest userSignUpRequest) {
         webTestClient.post()
                 .uri("/api/users/signup")
