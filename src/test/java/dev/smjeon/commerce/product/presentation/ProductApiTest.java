@@ -82,7 +82,8 @@ public class ProductApiTest extends TestTemplate {
                 .jsonPath("$.subCategory").isEqualTo("신선식품")
                 .jsonPath("$.lowestCategory").isEqualTo("쌀")
                 .jsonPath("$.price").isEqualTo(100_000)
-                .jsonPath("$.shippingFee").isEqualTo(3_000);
+                .jsonPath("$.shippingFee").isEqualTo(3_000)
+                .jsonPath("$.userResponse.email.email", userLoginRequest.getEmail());
     }
 
     @Test
@@ -117,7 +118,8 @@ public class ProductApiTest extends TestTemplate {
                 .jsonPath("$.subCategory").isEqualTo("신선식품")
                 .jsonPath("$.lowestCategory").isEqualTo("쌀")
                 .jsonPath("$.price").isEqualTo(200_000)
-                .jsonPath("$.shippingFee").isEqualTo(3_000);
+                .jsonPath("$.shippingFee").isEqualTo(3_000)
+                .jsonPath("$.userResponse.email.email", sellerLoginRequest.getEmail());
     }
 
     @Test
