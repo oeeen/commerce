@@ -49,18 +49,17 @@ public class CategoryApiTest extends TestTemplate {
     }
 
     @Test
-    @DisplayName("이미 존재하는 카테고리를 생성하면 기존 카테고리가 조회됩니다.")
+    @DisplayName("이미 존재하는 카테고리를 생성하면 Access Denied 됩니다. ")
     void createDuplicatedCategory() {
         String lowestCategory = "쌀";
         String subCategory = "신선식품";
         String topCategory = "식품";
         CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
 
-        respondApi(loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
-                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())))
-                .jsonPath("$.topCategory").isEqualTo(topCategory)
-                .jsonPath("$.subCategory").isEqualTo(subCategory)
-                .jsonPath("$.lowestCategory").isEqualTo(lowestCategory);
+        loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.FOUND,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
     }
 
     @Test

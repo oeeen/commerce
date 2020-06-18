@@ -5,6 +5,7 @@ import dev.smjeon.commerce.category.domain.LowestCategory;
 import dev.smjeon.commerce.category.domain.SubCategory;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.category.dto.CategoryRequest;
+import dev.smjeon.commerce.category.exception.DuplicatedCategoryException;
 import dev.smjeon.commerce.category.exception.NotFoundCategoryException;
 import dev.smjeon.commerce.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,15 @@ public class CategoryInternalService {
                 .filter(category -> category.isSameCategory(requestedCategory))
                 .findAny();
 
-        return categoryRepository.save(topCategory.orElse(requestedCategory));
+        if (topCategory.isPresent()) {
+            throw new DuplicatedCategoryException(
+                    requestedCategory.getCategoryNameValue() + " - " +
+                            requestedCategory.getSubCategoryValue() + " - " +
+                            requestedCategory.getLowestCategoryValue()
+            );
+        }
+
+        return categoryRepository.save(requestedCategory);
     }
 
     private TopCategory createTopCategory(CategoryRequest categoryRequest) {
