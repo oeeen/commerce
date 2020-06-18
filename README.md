@@ -17,8 +17,9 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - H2, MySQL
 - thymeleaf
 
-## 현재 이슈 (2020/06/16)
+## 현재 이슈 (2020/06/18)
 
+- CSRF protection
 - Logout Test
 - WithMockCustomUser Annotation 적용 방법?
     - TestSecurityContextHolder 의 TestSecurityContext 내부의 Authentication 까지 들어오는 것은 확인했음
