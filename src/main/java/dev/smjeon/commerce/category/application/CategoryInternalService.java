@@ -9,10 +9,12 @@ import dev.smjeon.commerce.category.exception.DuplicatedCategoryException;
 import dev.smjeon.commerce.category.exception.NotFoundCategoryException;
 import dev.smjeon.commerce.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class CategoryInternalService {
     private final CategoryRepository categoryRepository;
