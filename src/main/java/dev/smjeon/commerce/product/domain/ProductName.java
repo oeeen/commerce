@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.product.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.smjeon.commerce.product.exception.InvalidBrandNameException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 public class ProductName {
     private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]*";
 
+    @JsonIgnore
     @Transient
     private final Pattern pattern = Pattern.compile(PATTERN);
 

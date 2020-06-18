@@ -38,16 +38,23 @@ public class UserService {
     }
 
     @PostConstruct
-    private void addAdmin() {
-        User user = new User(new Email("oeeen3@gmail.com"),
+    private void addDefaultUser() {
+        addUser(new Email("oeeen3@gmail.com"), UserRole.ADMIN);
+        addUser(new Email("admin@gmail.com"), UserRole.ADMIN);
+        addUser(new Email("seller@gmail.com"), UserRole.SELLER);
+        addUser(new Email("buyer@gmail.com"), UserRole.BUYER);
+    }
+
+    private void addUser(Email email, UserRole userRole) {
+        User user = new User(email,
                 new Password(passwordEncoder.encode("Aa12345!")),
                 "Seongmo",
                 new NickName("Martin"),
-                UserRole.ADMIN,
+                userRole,
                 UserStatus.ACTIVE);
-
         userRepository.save(user);
     }
+
 
     public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();

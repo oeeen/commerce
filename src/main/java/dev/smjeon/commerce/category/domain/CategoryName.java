@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.category.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.smjeon.commerce.category.exception.InvalidCategoryNameException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 public class CategoryName {
     private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣]*";
 
+    @JsonIgnore
     @Transient
     private final Pattern pattern = Pattern.compile(PATTERN);
 
