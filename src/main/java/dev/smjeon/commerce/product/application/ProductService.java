@@ -87,6 +87,11 @@ public class ProductService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
         User owner = getUserFromAuthentication();
 
+        if (owner.isAdmin()) {
+            product.block();
+            return;
+        }
+
         product.remove(owner);
     }
 

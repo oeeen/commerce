@@ -14,8 +14,12 @@ import dev.smjeon.commerce.product.repository.ProductRepository;
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.user.application.UserInternalService;
+import dev.smjeon.commerce.user.domain.Email;
+import dev.smjeon.commerce.user.domain.NickName;
+import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
+import dev.smjeon.commerce.user.domain.UserStatus;
 import dev.smjeon.commerce.user.exception.MismatchedUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,6 +68,8 @@ class ProductServiceTest {
     @Mock
     private User other;
 
+    private User admin;
+
     private Product product;
 
     @BeforeEach
@@ -75,6 +81,13 @@ class ProductServiceTest {
                 new ShippingFee(3_000),
                 owner,
                 ProductStatus.ACTIVE);
+
+        admin = new User(new Email("admin@admin.com"),
+                new Password("Aa12345!"),
+                "Admin",
+                new NickName("Admin"),
+                UserRole.ADMIN,
+                UserStatus.ACTIVE);
     }
 
     @Test
@@ -116,10 +129,10 @@ class ProductServiceTest {
     void updateWithOwner() {
         ProductName productName = new ProductName("브랜드", "상품명");
         ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
-        initSecurityContext();
+        initSecurityContext(UserRole.SELLER);
 
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
-        given(userService.findById(anyLong())).willReturn(other);
+        given(userService.findById(anyLong())).willReturn(owner);
 
         ProductResponse response = productService.update(1L, request);
 
@@ -135,7 +148,7 @@ class ProductServiceTest {
     void updateWithoutOwner() {
         ProductName productName = new ProductName("브랜드", "상품명");
         ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
-        initSecurityContext();
+        initSecurityContext(UserRole.SELLER);
 
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
         given(userService.findById(anyLong())).willReturn(other);
@@ -145,8 +158,36 @@ class ProductServiceTest {
         verify(productRepository).findById(1L);
     }
 
-    private void initSecurityContext() {
-        UserContext userContext = new UserContext(1L, "ABCD", "Seongmo", UserRole.SELLER);
+    @Test
+    @DisplayName("본인의 상품이면 삭제가 됩니다.(ProductStatus = REMOVED)")
+    void deleteWithOwner() {
+        initSecurityContext(UserRole.SELLER);
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
+        given(userService.findById(anyLong())).willReturn(owner);
+
+        productService.delete(1L);
+
+        verify(productRepository).findById(1L);
+        assertEquals(product.getStatus(), ProductStatus.REMOVED);
+    }
+
+    @Test
+    @DisplayName("관리자가 삭제요청을 하면 Blocked 상태로 변경됩니다.")
+    void deleteWithAdmin() {
+        initSecurityContext(UserRole.ADMIN);
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
+        given(userService.findById(anyLong())).willReturn(admin);
+
+        productService.delete(1L);
+
+        verify(productRepository).findById(1L);
+        assertEquals(product.getStatus(), ProductStatus.BLOCKED);
+    }
+
+    private void initSecurityContext(UserRole userRole) {
+        UserContext userContext = new UserContext(1L, "ABCD", "Seongmo", userRole);
 
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         PostAuthorizationToken token = new PostAuthorizationToken(userContext);

@@ -107,4 +107,8 @@ public class Product extends BaseEntity {
             throw new MismatchedUserException(requestedOwner.getId());
         }
     }
+
+    public void block() {
+        this.status = ProductStatus.BLOCKED;
+    }
 }
