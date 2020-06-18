@@ -68,4 +68,14 @@ public class UserTest {
 
         assertTrue(user.isActive());
     }
+
+    @Test
+    @DisplayName("현재 계정이 권한에 따라 ADMIN = true, OTHER = false")
+    void isAdmin() {
+        User admin = new User(email, password, name, nickName, UserRole.ADMIN, UserStatus.ACTIVE);
+        assertTrue(admin.isAdmin());
+
+        User other = new User(email, password, name, nickName, UserRole.SELLER, UserStatus.ACTIVE);
+        assertFalse(other.isAdmin());
+    }
 }
