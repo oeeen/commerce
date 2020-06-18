@@ -8,7 +8,6 @@ import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
 import dev.smjeon.commerce.user.domain.UserStatus;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
-import dev.smjeon.commerce.user.dto.UserResponse;
 import dev.smjeon.commerce.user.dto.UserSignUpRequest;
 import dev.smjeon.commerce.user.exception.DuplicatedEmailException;
 import dev.smjeon.commerce.user.exception.InvalidPasswordException;
@@ -40,7 +39,7 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
 
     @InjectMocks
-    private UserService userService;
+    private UserInternalService userService;
 
     @Mock
     private UserRepository userRepository;
@@ -62,8 +61,8 @@ class UserServiceTest {
         List<User> users = Collections.singletonList(user);
         given(userRepository.findAll()).willReturn(users);
 
-        List<UserResponse> response = userService.findAll();
-        UserResponse userResponse = response.get(0);
+        List<User> response = userService.findAll();
+        User userResponse = response.get(0);
 
         verify(userRepository).findAll();
         assertEquals(userResponse.getEmail(), email);
@@ -100,7 +99,7 @@ class UserServiceTest {
         given(userRepository.existsByEmail(email)).willReturn(false);
         given(passwordEncoder.encode(anyString())).willReturn(password.getValue());
 
-        UserResponse userResponse = userService.save(userSignUpRequest);
+        User userResponse = userService.save(userSignUpRequest);
 
         verify(userRepository, times(1)).save(user);
         assertEquals(userResponse.getNickName(), nickName);
@@ -116,7 +115,7 @@ class UserServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-        UserResponse userResponse = userService.login(userLoginRequest);
+        User userResponse = userService.login(userLoginRequest);
 
         verify(userRepository).findByEmail(email);
         assertEquals(userResponse.getNickName(), nickName);

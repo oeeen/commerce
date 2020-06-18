@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.product.dto;
 
+import dev.smjeon.commerce.user.dto.UserResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +16,10 @@ public class ProductResponse {
     private String lowestCategory;
     private int price;
     private int shippingFee;
+    private UserResponse userResponse;
 
     public ProductResponse(Long id, String brandName, String productName, String topCategory,
-                           String subCategory, String lowestCategory, int price, int shippingFee) {
+                           String subCategory, String lowestCategory, int price, int shippingFee, UserResponse userResponse) {
         this.id = id;
         this.brandName = brandName;
         this.productName = productName;
@@ -26,5 +28,6 @@ public class ProductResponse {
         this.lowestCategory = lowestCategory;
         this.price = price;
         this.shippingFee = shippingFee;
+        this.userResponse = userResponse;
     }
 }
