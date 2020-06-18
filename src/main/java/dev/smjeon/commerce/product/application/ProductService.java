@@ -4,6 +4,7 @@ import dev.smjeon.commerce.category.application.CategoryInternalService;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.product.converter.ProductConverter;
 import dev.smjeon.commerce.product.domain.Product;
+import dev.smjeon.commerce.product.domain.ProductStatus;
 import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
@@ -62,7 +63,8 @@ public class ProductService {
         TopCategory category = categoryInternalService.findById(categoryId);
         User foundUser = getUserFromAuthentication();
 
-        Product product = new Product(category, productRequest.getName(), productRequest.getType(), productRequest.getPrice(), productRequest.getShippingFee(), foundUser);
+        Product product = new Product(category, productRequest.getName(), productRequest.getType(),
+                productRequest.getPrice(), productRequest.getShippingFee(), foundUser, ProductStatus.ACTIVE);
 
         return ProductConverter.toDto(productRepository.save(product));
     }
@@ -79,6 +81,13 @@ public class ProductService {
                 productRequest.getShippingFee());
 
         return ProductConverter.toDto(product);
+    }
+
+    public void delete(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
+        User owner = getUserFromAuthentication();
+
+        product.remove(owner);
     }
 
     private User getUserFromAuthentication() {

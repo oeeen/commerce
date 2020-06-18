@@ -5,6 +5,7 @@ import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.product.domain.Price;
 import dev.smjeon.commerce.product.domain.Product;
 import dev.smjeon.commerce.product.domain.ProductName;
+import dev.smjeon.commerce.product.domain.ProductStatus;
 import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.repository.ProductRepository;
@@ -52,7 +53,8 @@ class ProductServiceTest {
                 ProductType.NORMAL,
                 new Price(100_000),
                 new ShippingFee(3_000),
-                owner);
+                owner,
+                ProductStatus.ACTIVE);
     }
 
     @Test

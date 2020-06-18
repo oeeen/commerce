@@ -49,6 +49,7 @@ public class ProductTest {
                         productType,
                         price,
                         shippingFee,
-                        owner));
+                        owner,
+                        ProductStatus.ACTIVE));
     }
 }
