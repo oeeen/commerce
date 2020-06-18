@@ -10,6 +10,7 @@ import dev.smjeon.commerce.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryInternalService {
@@ -29,12 +30,14 @@ public class CategoryInternalService {
     }
 
     public TopCategory create(CategoryRequest categoryRequest) {
-        CategoryName topCategory = new CategoryName(categoryRequest.getTopCategory());
-        TopCategory result = categoryRepository.findByName(topCategory)
-                .filter((top) -> top.isSameCategory(createTopCategory(categoryRequest)))
-                .orElseGet(() -> createTopCategory(categoryRequest));
+        TopCategory requestedCategory = createTopCategory(categoryRequest);
 
-        return categoryRepository.save(result);
+        CategoryName topCategoryName = new CategoryName(categoryRequest.getTopCategory());
+        Optional<TopCategory> topCategory = categoryRepository.findByName(topCategoryName).stream()
+                .filter(category -> category.isSameCategory(requestedCategory))
+                .findAny();
+
+        return categoryRepository.save(topCategory.orElse(requestedCategory));
     }
 
     private TopCategory createTopCategory(CategoryRequest categoryRequest) {

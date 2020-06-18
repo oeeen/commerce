@@ -5,9 +5,9 @@ import dev.smjeon.commerce.category.domain.TopCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<TopCategory, Long> {
-    Optional<TopCategory> findByName(CategoryName categoryName);
+    List<TopCategory> findByName(CategoryName categoryName);
 }
