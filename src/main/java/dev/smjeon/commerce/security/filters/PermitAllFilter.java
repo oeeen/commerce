@@ -26,7 +26,7 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/login/**"));
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/login*"));
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/signup"));
-        permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/categories"));
+        permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/categories", HttpMethod.GET.name()));
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/products/**", HttpMethod.GET.name()));
     }
 

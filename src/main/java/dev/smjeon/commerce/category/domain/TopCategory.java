@@ -40,4 +40,8 @@ public class TopCategory extends BaseEntity {
     public String getLowestCategoryValue() {
         return this.subCategory.getLowestCategoryValue();
     }
+
+    public boolean isSameCategory(TopCategory topCategory) {
+        return this.name.equals(topCategory.getName()) && this.subCategory.equals(topCategory.getSubCategory());
+    }
 }

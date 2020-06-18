@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.category.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.Embedded;
 
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode(of = {"name", "lowestCategory"})
 @Embeddable
 public class SubCategory {
 

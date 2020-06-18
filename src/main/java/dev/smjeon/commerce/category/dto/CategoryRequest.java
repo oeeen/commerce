@@ -6,15 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class CategoryResponse {
-
-    private Long id;
+public class CategoryRequest {
     private String topCategory;
     private String subCategory;
     private String lowestCategory;
 
-    public CategoryResponse(Long id, String topCategory, String subCategory, String lowestCategory) {
-        this.id = id;
+    public CategoryRequest(String topCategory, String subCategory, String lowestCategory) {
         this.topCategory = topCategory;
         this.subCategory = subCategory;
         this.lowestCategory = lowestCategory;

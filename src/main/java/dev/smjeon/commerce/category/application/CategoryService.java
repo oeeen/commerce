@@ -2,6 +2,7 @@ package dev.smjeon.commerce.category.application;
 
 import dev.smjeon.commerce.category.converter.CategoryConverter;
 import dev.smjeon.commerce.category.domain.TopCategory;
+import dev.smjeon.commerce.category.dto.CategoryRequest;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,9 @@ public class CategoryService {
 
     public CategoryResponse findById(Long id) {
         return CategoryConverter.toDto(categoryInternalService.findById(id));
+    }
+
+    public CategoryResponse create(CategoryRequest categoryRequest) {
+        return CategoryConverter.toDto(categoryInternalService.create(categoryRequest));
     }
 }
