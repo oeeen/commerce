@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     @Enumerated
     private Gender gender;
 
-    private int age;
+    private Integer age;
 
     private LocalDate birthday;
 

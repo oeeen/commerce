@@ -2,6 +2,7 @@ package dev.smjeon.commerce.product.domain;
 
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.common.BaseEntity;
+import dev.smjeon.commerce.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,12 +36,17 @@ public class Product extends BaseEntity {
     @Embedded
     private ShippingFee shippingFee;
 
-    public Product(TopCategory topCategory, ProductName name, ProductType type, Price price, ShippingFee shippingFee) {
+    @ManyToOne
+    @JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = "owner_id"), nullable = false)
+    private User owner;
+
+    public Product(TopCategory topCategory, ProductName name, ProductType type, Price price, ShippingFee shippingFee, User owner) {
         this.topCategory = topCategory;
         this.name = name;
         this.type = type;
         this.price = price;
         this.shippingFee = shippingFee;
+        this.owner = owner;
     }
 
     public String getTopCategoryValue() {
