@@ -1,5 +1,6 @@
 package dev.smjeon.commerce.security.filters;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
@@ -26,7 +27,7 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/login*"));
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/signup"));
         permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/categories"));
-        permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/products/**"));
+        permitAllRequestMatchers.add(new AntPathRequestMatcher("/api/products/**", HttpMethod.GET.name()));
     }
 
     @Override

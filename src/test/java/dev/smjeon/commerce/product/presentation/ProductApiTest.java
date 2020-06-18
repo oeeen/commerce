@@ -71,4 +71,17 @@ public class ProductApiTest extends TestTemplate {
                 .jsonPath("$.price").isEqualTo(100_000)
                 .jsonPath("$.shippingFee").isEqualTo(3_000);
     }
+
+    @Test
+    @DisplayName("BUYER 권한으로는 상품을 추가할 수 없습니다.(Access Denied 로 Redirect)")
+    void createProductsWithoutAuthority() {
+        ProductName productName = new ProductName("노브랜드", "테스트 상품");
+        ProductType type = ProductType.NORMAL;
+        Price price = new Price(100_000);
+        ShippingFee shippingFee = new ShippingFee(3_000);
+        ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
+
+        loginAndRequest(HttpMethod.POST, "/api/products?category=1", productRequest, HttpStatus.FOUND,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword()));
+    }
 }
