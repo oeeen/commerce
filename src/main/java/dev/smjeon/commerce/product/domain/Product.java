@@ -74,4 +74,11 @@ public class Product extends BaseEntity {
     public boolean isEventType() {
         return ProductType.EVENT.equals(this.type);
     }
+
+    public void update(ProductName name, ProductType type, Price price, ShippingFee shippingFee) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.shippingFee = shippingFee;
+    }
 }

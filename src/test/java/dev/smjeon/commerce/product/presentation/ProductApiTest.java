@@ -6,6 +6,7 @@ import dev.smjeon.commerce.product.domain.ProductName;
 import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.dto.ProductRequest;
+import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,5 +95,41 @@ public class ProductApiTest extends TestTemplate {
 
         loginAndRequest(HttpMethod.POST, "/api/products?category=1", productRequest, HttpStatus.FOUND,
                 loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword()));
+    }
+
+    @Test
+    @DisplayName("본인의 상품 정보를 수정할 수 있습니다.")
+    void updateProducts() {
+        ProductResponse response = createProducts(sellerLoginRequest);
+
+        ProductName productName = new ProductName("변경후 브랜드", "변경 후 상품");
+        ProductType type = ProductType.NORMAL;
+        Price price = new Price(200_000);
+        ShippingFee shippingFee = new ShippingFee(3_000);
+        ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
+
+        respondApi(loginAndRequest(HttpMethod.PUT, "/api/products/" + response.getId(), productRequest, HttpStatus.OK,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword())))
+                .jsonPath("$.brandName").isEqualTo("변경후 브랜드")
+                .jsonPath("$.productName").isEqualTo("변경 후 상품")
+                .jsonPath("$.topCategory").isEqualTo("식품")
+                .jsonPath("$.subCategory").isEqualTo("신선식품")
+                .jsonPath("$.lowestCategory").isEqualTo("쌀")
+                .jsonPath("$.price").isEqualTo(200_000)
+                .jsonPath("$.shippingFee").isEqualTo(3_000);
+    }
+
+    private ProductResponse createProducts(UserLoginRequest userLoginRequest) {
+        ProductName productName = new ProductName("변경 전 브랜드", "변경 전 상품");
+        ProductType type = ProductType.NORMAL;
+        Price price = new Price(100_000);
+        ShippingFee shippingFee = new ShippingFee(3_000);
+        ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
+
+        return loginAndRequest(HttpMethod.POST, "/api/products?category=1", productRequest, HttpStatus.CREATED,
+                loginSessionId(userLoginRequest.getEmail(), userLoginRequest.getPassword()))
+                .expectBody(ProductResponse.class)
+                .returnResult()
+                .getResponseBody();
     }
 }

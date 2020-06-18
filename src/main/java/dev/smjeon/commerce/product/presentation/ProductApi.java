@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,5 +47,11 @@ public class ProductApi {
                                                          @RequestBody ProductRequest productRequest) {
         ProductResponse response = productService.create(productRequest, categoryId);
         return ResponseEntity.created(URI.create("/api/categories/" + categoryId + "/products/" + response.getId())).body(response);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponse> update(@PathVariable Long productId,
+                                                  @RequestBody ProductRequest productRequest) {
+        return ResponseEntity.ok(productService.update(productId, productRequest));
     }
 }
