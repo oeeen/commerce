@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode(of = {"brandName", "productName"})
 @Embeddable
 public class ProductName {
-    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]*";
+    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣 ]*";
 
     @JsonIgnore
     @Transient

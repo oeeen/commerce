@@ -3,7 +3,7 @@ package dev.smjeon.commerce.security.providers;
 import dev.smjeon.commerce.security.exception.UnauthorizedException;
 import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.security.token.PreAuthorizationToken;
-import dev.smjeon.commerce.user.application.UserService;
+import dev.smjeon.commerce.user.application.UserInternalService;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.Password;
 import dev.smjeon.commerce.user.domain.User;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FormLoginAuthenticationProvider implements AuthenticationProvider {
 
-    private UserService userService;
+    private UserInternalService userService;
     private UserRepository userRepository;
 
-    public FormLoginAuthenticationProvider(UserService userService, UserRepository userRepository) {
+    public FormLoginAuthenticationProvider(UserInternalService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
     }

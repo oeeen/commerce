@@ -2,9 +2,14 @@ package dev.smjeon.commerce.product.application;
 
 import dev.smjeon.commerce.category.application.CategoryInternalService;
 import dev.smjeon.commerce.category.domain.TopCategory;
+import dev.smjeon.commerce.product.domain.Price;
 import dev.smjeon.commerce.product.domain.Product;
+import dev.smjeon.commerce.product.domain.ProductName;
 import dev.smjeon.commerce.product.domain.ProductType;
+import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.repository.ProductRepository;
+import dev.smjeon.commerce.user.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,11 +17,11 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -35,9 +40,25 @@ class ProductServiceTest {
     @Mock
     private TopCategory category;
 
+    @Mock
+    private User owner;
+
+    private Product product;
+
+    @BeforeEach
+    void setUp() {
+        product = new Product(category,
+                new ProductName("testBrand", "testProduct"),
+                ProductType.NORMAL,
+                new Price(100_000),
+                new ShippingFee(3_000),
+                owner);
+    }
+
     @Test
     void findAll() {
-        given(productRepository.findAll()).willReturn(Collections.singletonList(mock(Product.class)));
+        List<Product> products = Collections.singletonList(product);
+        given(productRepository.findAll()).willReturn(products);
 
         productService.findAll();
 
@@ -46,8 +67,10 @@ class ProductServiceTest {
 
     @Test
     void findByCategory() {
+        List<Product> products = Collections.singletonList(product);
+
         given(categoryInternalService.findById(anyLong())).willReturn(category);
-        given(productRepository.findAllByTopCategory(any(TopCategory.class))).willReturn(Collections.singletonList(mock(Product.class)));
+        given(productRepository.findAllByTopCategory(any(TopCategory.class))).willReturn(products);
 
         productService.findByCategory(10L);
 
@@ -57,7 +80,8 @@ class ProductServiceTest {
 
     @Test
     void findAllEventProduct() {
-        given(productRepository.findAllByType(any(ProductType.class))).willReturn(Collections.singletonList(mock(Product.class)));
+        List<Product> products = Collections.singletonList(product);
+        given(productRepository.findAllByType(any(ProductType.class))).willReturn(products);
 
         productService.findAllByProductType(ProductType.EVENT);
 

@@ -17,6 +17,12 @@ public class ProductNameTest {
     }
 
     @Test
+    @DisplayName("브랜드 이름은 띄어쓰기는 가능합니다.")
+    void normalProductNameWithWhitespace() {
+        assertDoesNotThrow(() -> new ProductName("띄 어 쓰 기", "상품명"));
+    }
+
+    @Test
     @DisplayName("브랜드 이름은 특수문자가 불가능합니다.")
     void abNormalBrandName() {
         assertThrows(InvalidBrandNameException.class, () -> new ProductName("!@#$", "파주참드림_10KG 포"));
