@@ -9,6 +9,7 @@ public class CategoryConverter {
 
     public static CategoryResponse toDto(TopCategory topCategory) {
         return new CategoryResponse(
+                topCategory.getId(),
                 topCategory.getCategoryNameValue(),
                 topCategory.getSubCategoryValue(),
                 topCategory.getLowestCategoryValue()

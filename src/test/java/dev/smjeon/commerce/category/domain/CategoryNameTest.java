@@ -16,6 +16,12 @@ public class CategoryNameTest {
     }
 
     @Test
+    @DisplayName("카테고리 이름에 공백은 가능합니다.")
+    void categoryNameWithWhiteSpace() {
+        assertDoesNotThrow(() -> new CategoryName("최상위 카테고리"));
+    }
+
+    @Test
     @DisplayName("카테고리 이름에는 특수문자가 불가능합니다.")
     void abnormalCategory() {
         assertThrows(InvalidCategoryNameException.class, () -> new CategoryName("!@#$"));

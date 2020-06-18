@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserApiControllerTest extends TestTemplate {
+public class UserApiTest extends TestTemplate {
 
     @Test
     @DisplayName("유저 리스트가 출력됩니다.")

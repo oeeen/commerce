@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode(of = "value")
 @Embeddable
 public class CategoryName {
-    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣]*";
+    private static final String PATTERN = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣㅍ가-힣 ]*";
 
     @JsonIgnore
     @Transient
