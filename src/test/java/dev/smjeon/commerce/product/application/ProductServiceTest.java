@@ -16,6 +16,7 @@ import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.user.application.UserInternalService;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.domain.UserRole;
+import dev.smjeon.commerce.user.exception.MismatchedUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -58,6 +60,9 @@ class ProductServiceTest {
 
     @Mock
     private User owner;
+
+    @Mock
+    private User other;
 
     private Product product;
 
@@ -111,15 +116,10 @@ class ProductServiceTest {
     void updateWithOwner() {
         ProductName productName = new ProductName("브랜드", "상품명");
         ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
-        UserContext userContext = new UserContext(1L, "ABCD", "Seongmo", UserRole.SELLER);
-
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        PostAuthorizationToken token = new PostAuthorizationToken(userContext);
-        securityContext.setAuthentication(token);
-        TestSecurityContextHolder.setContext(securityContext);
+        initSecurityContext();
 
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
-        given(userService.findById(anyLong())).willReturn(owner);
+        given(userService.findById(anyLong())).willReturn(other);
 
         ProductResponse response = productService.update(1L, request);
 
@@ -128,5 +128,29 @@ class ProductServiceTest {
         assertEquals(response.getProductName(), "상품명");
         assertEquals(response.getPrice(), 100_000);
         assertEquals(response.getShippingFee(), 3_000);
+    }
+
+    @Test
+    @DisplayName("본인의 상품이 아니면 수정이 불가능합니다.")
+    void updateWithoutOwner() {
+        ProductName productName = new ProductName("브랜드", "상품명");
+        ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
+        initSecurityContext();
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
+        given(userService.findById(anyLong())).willReturn(other);
+
+        assertThrows(MismatchedUserException.class, () -> productService.update(1L, request));
+
+        verify(productRepository).findById(1L);
+    }
+
+    private void initSecurityContext() {
+        UserContext userContext = new UserContext(1L, "ABCD", "Seongmo", UserRole.SELLER);
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        PostAuthorizationToken token = new PostAuthorizationToken(userContext);
+        securityContext.setAuthentication(token);
+        TestSecurityContextHolder.setContext(securityContext);
     }
 }
