@@ -6,6 +6,7 @@ import dev.smjeon.commerce.product.domain.ProductName;
 import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.dto.ProductRequest;
+import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -55,6 +56,16 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("SELLER 권한으로 상품을 추가합니다.")
     void createProduct() {
+        addProducts(sellerLoginRequest);
+    }
+
+    @Test
+    @DisplayName("ADMIN 권한으로도 상품을 추가할 수 있습니다.")
+    void createProductsWithAdmin() {
+        addProducts(adminLoginRequest);
+    }
+
+    private void addProducts(UserLoginRequest userLoginRequest) {
         ProductName productName = new ProductName("노브랜드", "테스트 상품");
         ProductType type = ProductType.NORMAL;
         Price price = new Price(100_000);
@@ -62,7 +73,7 @@ public class ProductApiTest extends TestTemplate {
         ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
 
         respondApi(loginAndRequest(HttpMethod.POST, "/api/products?category=1", productRequest, HttpStatus.CREATED,
-                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword())))
+                loginSessionId(userLoginRequest.getEmail(), userLoginRequest.getPassword())))
                 .jsonPath("$.brandName").isEqualTo("노브랜드")
                 .jsonPath("$.productName").isEqualTo("테스트 상품")
                 .jsonPath("$.topCategory").isEqualTo("식품")
