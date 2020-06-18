@@ -3,6 +3,7 @@ package dev.smjeon.commerce.product.domain;
 import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.common.BaseEntity;
 import dev.smjeon.commerce.user.domain.User;
+import dev.smjeon.commerce.user.exception.MismatchedUserException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -81,10 +82,17 @@ public class Product extends BaseEntity {
         return ProductType.EVENT.equals(this.type);
     }
 
-    public void update(ProductName name, ProductType type, Price price, ShippingFee shippingFee) {
+    public void update(User owner, ProductName name, ProductType type, Price price, ShippingFee shippingFee) {
+        checkOwner(owner);
         this.name = name;
         this.type = type;
         this.price = price;
         this.shippingFee = shippingFee;
+    }
+
+    private void checkOwner(User requestedOwner) {
+        if (!this.owner.equals(requestedOwner)) {
+            throw new MismatchedUserException(requestedOwner.getId());
+        }
     }
 }

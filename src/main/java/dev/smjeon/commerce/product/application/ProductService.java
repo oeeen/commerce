@@ -9,6 +9,11 @@ import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.exception.NotFoundProductException;
 import dev.smjeon.commerce.product.repository.ProductRepository;
+import dev.smjeon.commerce.security.UserContext;
+import dev.smjeon.commerce.user.application.UserInternalService;
+import dev.smjeon.commerce.user.domain.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +25,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryInternalService categoryInternalService;
+    private final UserInternalService userService;
 
-    public ProductService(ProductRepository productRepository, CategoryInternalService categoryInternalService) {
+    public ProductService(ProductRepository productRepository, CategoryInternalService categoryInternalService, UserInternalService userService) {
         this.productRepository = productRepository;
         this.categoryInternalService = categoryInternalService;
+        this.userService = userService;
     }
 
     public List<ProductResponse> findAll() {
@@ -53,7 +60,9 @@ public class ProductService {
 
     public ProductResponse create(ProductRequest productRequest, Long categoryId) {
         TopCategory category = categoryInternalService.findById(categoryId);
-        Product product = new Product(category, productRequest.getName(), productRequest.getType(), productRequest.getPrice(), productRequest.getShippingFee());
+        User foundUser = getUserFromAuthentication();
+
+        Product product = new Product(category, productRequest.getName(), productRequest.getType(), productRequest.getPrice(), productRequest.getShippingFee(), foundUser);
 
         return ProductConverter.toDto(productRepository.save(product));
     }
@@ -61,11 +70,20 @@ public class ProductService {
     @Transactional
     public ProductResponse update(Long productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
-        product.update(productRequest.getName(),
+        User owner = getUserFromAuthentication();
+
+        product.update(owner,
+                productRequest.getName(),
                 productRequest.getType(),
                 productRequest.getPrice(),
                 productRequest.getShippingFee());
 
         return ProductConverter.toDto(product);
+    }
+
+    private User getUserFromAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext user = (UserContext) authentication.getPrincipal();
+        return userService.findById(user.getId());
     }
 }

@@ -8,6 +8,7 @@ import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -117,6 +118,24 @@ public class ProductApiTest extends TestTemplate {
                 .jsonPath("$.lowestCategory").isEqualTo("쌀")
                 .jsonPath("$.price").isEqualTo(200_000)
                 .jsonPath("$.shippingFee").isEqualTo(3_000);
+    }
+
+    @Test
+    @DisplayName("본인 상품이 아닌 경우 수정할 수 없습니다.")
+    void updateNotOwnProduct() {
+        ProductResponse response = createProducts(sellerLoginRequest);
+
+        ProductName productName = new ProductName("내꺼 아닌 브랜드", "내꺼 아닌데");
+        ProductType type = ProductType.NORMAL;
+        Price price = new Price(20_000_000);
+        ShippingFee shippingFee = new ShippingFee(3_000);
+        ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
+
+        loginAndRequest(HttpMethod.PUT, "/api/products/" + response.getId(), productRequest, HttpStatus.FOUND,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+
     }
 
     private ProductResponse createProducts(UserLoginRequest userLoginRequest) {
