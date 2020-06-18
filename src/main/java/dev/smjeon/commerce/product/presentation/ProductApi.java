@@ -5,6 +5,7 @@ import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,5 +54,12 @@ public class ProductApi {
     public ResponseEntity<ProductResponse> update(@PathVariable Long productId,
                                                   @RequestBody ProductRequest productRequest) {
         return ResponseEntity.ok(productService.update(productId, productRequest));
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> delete(@PathVariable Long productId) {
+        productService.delete(productId);
+
+        return ResponseEntity.noContent().build();
     }
 }

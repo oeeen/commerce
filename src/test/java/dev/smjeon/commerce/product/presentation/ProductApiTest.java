@@ -140,6 +140,15 @@ public class ProductApiTest extends TestTemplate {
 
     }
 
+    @Test
+    @DisplayName("본인 상품은 삭제할 수 있습니다.")
+    void deleteProduct() {
+        ProductResponse response = createProducts(sellerLoginRequest);
+
+        loginAndRequest(HttpMethod.DELETE, "/api/products/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()));
+    }
+
     private ProductResponse createProducts(UserLoginRequest userLoginRequest) {
         ProductName productName = new ProductName("변경 전 브랜드", "변경 전 상품");
         ProductType type = ProductType.NORMAL;
