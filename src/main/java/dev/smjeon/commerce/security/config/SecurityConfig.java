@@ -103,7 +103,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
 
         http
-                .csrf().ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users")
+                .csrf()
+                .ignoringAntMatchers("/h2-console", "/h2-console**", "/h2-console/", "/h2-console/**", "/api/users/**", "/api/users", "/api/products**")
                 .and()
                 .cors();
 
@@ -115,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(kakaoLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(githubLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(permitAllFilter(), FilterSecurityInterceptor.class)
+                .addFilterAt(permitAllFilter(), FilterSecurityInterceptor.class)
         ;
     }
 

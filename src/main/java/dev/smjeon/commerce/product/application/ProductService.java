@@ -5,6 +5,7 @@ import dev.smjeon.commerce.category.domain.TopCategory;
 import dev.smjeon.commerce.product.converter.ProductConverter;
 import dev.smjeon.commerce.product.domain.Product;
 import dev.smjeon.commerce.product.domain.ProductType;
+import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,12 @@ public class ProductService {
         return products.stream()
                 .map(ProductConverter::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public ProductResponse create(ProductRequest productRequest, Long categoryId) {
+        TopCategory category = categoryInternalService.findById(categoryId);
+        Product product = new Product(category, productRequest.getName(), productRequest.getType(), productRequest.getPrice(), productRequest.getShippingFee());
+
+        return ProductConverter.toDto(productRepository.save(product));
     }
 }

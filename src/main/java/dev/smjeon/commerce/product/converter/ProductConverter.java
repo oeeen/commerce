@@ -8,7 +8,9 @@ public class ProductConverter {
     }
 
     public static ProductResponse toDto(Product product) {
-        return new ProductResponse(product.getBrandNameValue(),
+        return new ProductResponse(
+                product.getId(),
+                product.getBrandNameValue(),
                 product.getProductNameValue(),
                 product.getTopCategoryValue(),
                 product.getSubCategoryValue(),
