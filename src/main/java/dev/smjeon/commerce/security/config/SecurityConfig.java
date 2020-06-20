@@ -8,8 +8,6 @@ import dev.smjeon.commerce.security.filters.KakaoLoginFilter;
 import dev.smjeon.commerce.security.filters.PermitAllFilter;
 import dev.smjeon.commerce.security.handlers.CustomAccessDeniedHandler;
 import dev.smjeon.commerce.security.handlers.CustomLogoutSuccessHandler;
-import dev.smjeon.commerce.security.handlers.FormLoginAuthenticationFailureHandler;
-import dev.smjeon.commerce.security.handlers.FormLoginAuthenticationSuccessHandler;
 import dev.smjeon.commerce.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import dev.smjeon.commerce.security.providers.FormLoginAuthenticationProvider;
 import dev.smjeon.commerce.security.providers.SocialLoginAuthenticationProvider;
@@ -43,15 +41,21 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationFailureHandler authenticationFailureHandler;
     private FormLoginAuthenticationProvider formLoginAuthenticationProvider;
     private SocialLoginAuthenticationProvider kakaoLoginAuthenticationProvider;
     private SocialLoginAuthenticationProvider githubLoginAuthenticationProvider;
     private SecurityResourceService securityResourceService;
 
-    public SecurityConfig(FormLoginAuthenticationProvider formLoginAuthenticationProvider,
+    public SecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler,
+                          AuthenticationFailureHandler authenticationFailureHandler,
+                          FormLoginAuthenticationProvider formLoginAuthenticationProvider,
                           SocialLoginAuthenticationProvider kakaoLoginAuthenticationProvider,
                           SocialLoginAuthenticationProvider githubLoginAuthenticationProvider,
                           SecurityResourceService securityResourceService) {
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
         this.formLoginAuthenticationProvider = formLoginAuthenticationProvider;
         this.kakaoLoginAuthenticationProvider = kakaoLoginAuthenticationProvider;
         this.githubLoginAuthenticationProvider = githubLoginAuthenticationProvider;
@@ -132,22 +136,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FormLoginFilter formLoginFilter() throws Exception {
-        FormLoginFilter filter = new FormLoginFilter("/api/users/signin",
-                formLoginAuthenticationSuccessHandler(),
-                formLoginAuthenticationFailureHandler());
+        FormLoginFilter filter = new FormLoginFilter("/api/users/signin", authenticationSuccessHandler, authenticationFailureHandler);
         filter.setAuthenticationManager(super.authenticationManagerBean());
 
         return filter;
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler formLoginAuthenticationSuccessHandler() {
-        return new FormLoginAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationFailureHandler formLoginAuthenticationFailureHandler() {
-        return new FormLoginAuthenticationFailureHandler();
     }
 
     @Bean
