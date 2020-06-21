@@ -36,10 +36,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-class UserServiceTest {
+class UserInternalServiceTest {
 
     @InjectMocks
-    private UserInternalService userService;
+    private UserInternalService userInternalService;
 
     @Mock
     private UserRepository userRepository;
@@ -61,7 +61,7 @@ class UserServiceTest {
         List<User> users = Collections.singletonList(user);
         given(userRepository.findAll()).willReturn(users);
 
-        List<User> response = userService.findAll();
+        List<User> response = userInternalService.findAll();
         User userResponse = response.get(0);
 
         verify(userRepository).findAll();
@@ -76,7 +76,7 @@ class UserServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(user));
         given(modelMapper.map(user, UserContext.class)).willReturn(mock(UserContext.class));
 
-        userService.findByEmail(email);
+        userInternalService.findByEmail(email);
         verify(userRepository).findByEmail(email);
     }
 
@@ -88,7 +88,7 @@ class UserServiceTest {
         given(passwordEncoder.encode(anyString())).willReturn(password.getValue());
 
 
-        assertThrows(DuplicatedEmailException.class, () -> userService.save(userSignUpRequest));
+        assertThrows(DuplicatedEmailException.class, () -> userInternalService.save(userSignUpRequest));
         verify(userRepository, times(0)).save(user);
     }
 
@@ -99,7 +99,7 @@ class UserServiceTest {
         given(userRepository.existsByEmail(email)).willReturn(false);
         given(passwordEncoder.encode(anyString())).willReturn(password.getValue());
 
-        User userResponse = userService.save(userSignUpRequest);
+        User userResponse = userInternalService.save(userSignUpRequest);
 
         verify(userRepository, times(1)).save(user);
         assertEquals(userResponse.getNickName(), nickName);
@@ -115,7 +115,7 @@ class UserServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
-        User userResponse = userService.login(userLoginRequest);
+        User userResponse = userInternalService.login(userLoginRequest);
 
         verify(userRepository).findByEmail(email);
         assertEquals(userResponse.getNickName(), nickName);
@@ -131,7 +131,7 @@ class UserServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.ofNullable(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
-        assertThrows(InvalidPasswordException.class, () -> userService.login(userLoginRequest));
+        assertThrows(InvalidPasswordException.class, () -> userInternalService.login(userLoginRequest));
         verify(userRepository).findByEmail(email);
     }
 
@@ -139,13 +139,13 @@ class UserServiceTest {
     void withdraw() {
         given(userRepository.findById(anyLong())).willReturn(Optional.ofNullable(user));
 
-        userService.withdraw(1L);
+        userInternalService.withdraw(1L);
 
         verify(userRepository).findById(1L);
     }
 
     @Test
     void isActiveUser() {
-        assertTrue(userService.isActiveUser(user));
+        assertTrue(userInternalService.isActiveUser(user));
     }
 }
