@@ -78,4 +78,13 @@ public class UserTest {
         User other = new User(email, password, name, nickName, UserRole.SELLER, UserStatus.ACTIVE);
         assertFalse(other.isAdmin());
     }
+
+    @Test
+    @DisplayName("로그인 시 lastLogin field가 현재 시간으로 업데이트 됩니다.")
+    void login() {
+        User user = new User(email, password, name, nickName, UserRole.SELLER, UserStatus.ACTIVE);
+
+        user.login();
+        assertEquals(user.getLastLogin(), LocalDate.now());
+    }
 }
