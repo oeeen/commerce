@@ -38,7 +38,7 @@ public class ProductApi {
         return ResponseEntity.ok(productService.findByCategory(categoryId));
     }
 
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<List<ProductResponse>> findAllByProductType(@PathVariable ProductType type) {
         return ResponseEntity.ok(productService.findAllByProductType(type));
     }
@@ -48,6 +48,11 @@ public class ProductApi {
                                                          @RequestBody ProductRequest productRequest) {
         ProductResponse response = productService.create(productRequest, categoryId);
         return ResponseEntity.created(URI.create("/api/categories/" + categoryId + "/products/" + response.getId())).body(response);
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> findById(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.findById(productId));
     }
 
     @PutMapping("/{productId}")

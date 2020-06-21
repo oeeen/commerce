@@ -9,12 +9,27 @@ import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 public class ProductApiTest extends TestTemplate {
+    private ProductName productName;
+    private ProductType type;
+    private Price price;
+    private ShippingFee shippingFee;
+    private ProductRequest requestBeforeUpdate;
+
+    @BeforeEach
+    void setUp() {
+        productName = new ProductName("변경 전 브랜드", "변경 전 상품");
+        type = ProductType.NORMAL;
+        price = new Price(100_000);
+        shippingFee = new ShippingFee(3_000);
+        requestBeforeUpdate = new ProductRequest(productName, type, price, shippingFee);
+    }
 
     @Test
     @DisplayName("권한 없이 모든 상품 리스트를 조회합니다.")
@@ -45,7 +60,7 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("권한 없이 이벤트 상품 리스트를 조회합니다.")
     void findEventProducts() {
-        respondApi(request(HttpMethod.GET, "/api/products/event", Void.class, HttpStatus.OK))
+        respondApi(request(HttpMethod.GET, "/api/products/type/event", Void.class, HttpStatus.OK))
                 .jsonPath("$.[0].brandName").isEqualTo("이벤트")
                 .jsonPath("$.[0].productName").isEqualTo("헤드셋")
                 .jsonPath("$.[0].topCategory").isEqualTo("컴퓨터")
@@ -102,7 +117,7 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("본인의 상품 정보를 수정할 수 있습니다.")
     void updateProducts() {
-        ProductResponse response = createProducts(sellerLoginRequest);
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, requestBeforeUpdate);
 
         ProductName productName = new ProductName("변경후 브랜드", "변경 후 상품");
         ProductType type = ProductType.NORMAL;
@@ -125,7 +140,7 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("본인 상품이 아닌 경우 수정할 수 없습니다.")
     void updateNotOwnProduct() {
-        ProductResponse response = createProducts(sellerLoginRequest);
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, requestBeforeUpdate);
 
         ProductName productName = new ProductName("내꺼 아닌 브랜드", "내꺼 아닌데");
         ProductType type = ProductType.NORMAL;
@@ -143,23 +158,51 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("본인 상품은 삭제할 수 있습니다.")
     void deleteProduct() {
-        ProductResponse response = createProducts(sellerLoginRequest);
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, requestBeforeUpdate);
 
         loginAndRequest(HttpMethod.DELETE, "/api/products/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
                 loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()));
     }
 
-    private ProductResponse createProducts(UserLoginRequest userLoginRequest) {
-        ProductName productName = new ProductName("변경 전 브랜드", "변경 전 상품");
-        ProductType type = ProductType.NORMAL;
-        Price price = new Price(100_000);
-        ShippingFee shippingFee = new ShippingFee(3_000);
-        ProductRequest productRequest = new ProductRequest(productName, type, price, shippingFee);
-
+    private ProductResponse createProductsFromProductRequest(UserLoginRequest userLoginRequest, ProductRequest productRequest) {
         return loginAndRequest(HttpMethod.POST, "/api/products?category=1", productRequest, HttpStatus.CREATED,
                 loginSessionId(userLoginRequest.getEmail(), userLoginRequest.getPassword()))
                 .expectBody(ProductResponse.class)
                 .returnResult()
                 .getResponseBody();
+    }
+
+
+    @Test
+    @DisplayName("Product ID로 특정 상품을 누구든지 조회 가능합니다.(ProductStatus = ACTIVE)")
+    void readSpecificProduct() {
+        ProductName productName = new ProductName("특정 브랜드", "특정 상품");
+        ProductType productType = ProductType.NORMAL;
+        Price price = new Price(200_000);
+        ShippingFee shippingFee = new ShippingFee(5_000);
+        ProductRequest productRequest = new ProductRequest(productName, productType, price, shippingFee);
+
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, productRequest);
+
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/products/" + response.getId(), Void.class, HttpStatus.OK,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword())))
+                .jsonPath("$.brandName").isEqualTo("특정 브랜드")
+                .jsonPath("$.productName").isEqualTo("특정 상품")
+                .jsonPath("$.price").isEqualTo(200_000)
+                .jsonPath("$.shippingFee").isEqualTo(5_000);
+    }
+
+    @Test
+    @DisplayName("REMOVED 상태의 상품은 조회되지 않습니다.")
+    void readRemovedProduct() {
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, requestBeforeUpdate);
+
+        loginAndRequest(HttpMethod.DELETE, "/api/products/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()));
+
+        loginAndRequest(HttpMethod.GET, "/api/products/" + response.getId(), Void.class, HttpStatus.FOUND,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
     }
 }

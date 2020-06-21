@@ -9,6 +9,7 @@ import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.exception.NotFoundProductException;
+import dev.smjeon.commerce.product.exception.NotViewableProductException;
 import dev.smjeon.commerce.product.repository.ProductRepository;
 import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.application.UserInternalService;
@@ -83,6 +84,7 @@ public class ProductService {
         return ProductConverter.toDto(product);
     }
 
+    @Transactional
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
         User owner = getUserFromAuthentication();
@@ -99,5 +101,14 @@ public class ProductService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext user = (UserContext) authentication.getPrincipal();
         return userService.findById(user.getId());
+    }
+
+    public ProductResponse findById(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
+        if (!product.isViewable()) {
+            throw new NotViewableProductException(product.getStatus().name());
+        }
+
+        return ProductConverter.toDto(product);
     }
 }
