@@ -212,4 +212,24 @@ class ProductServiceTest {
         assertThrows(NotViewableProductException.class, () -> productService.findById(1L));
         verify(productRepository).findById(1L);
     }
+
+    @Test
+    @WithAnonymousUser
+    @DisplayName("BLOCKED 상태의 상품을 조회 시도 시 NotViewableProductException이 발생합니다.")
+    void findByIdBLOCKEDProduct() {
+        Product blocked = new Product(
+                category,
+                new ProductName("차단 브랜드", "차단 상품"),
+                ProductType.NORMAL,
+                new Price(100_000),
+                new ShippingFee(3_000),
+                owner,
+                ProductStatus.BLOCKED
+        );
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(blocked));
+
+        assertThrows(NotViewableProductException.class, () -> productService.findById(1L));
+        verify(productRepository).findById(1L);
+    }
 }
