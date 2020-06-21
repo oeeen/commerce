@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -40,6 +41,8 @@ public class User extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
+
+    private LocalDateTime lastLogin;
 
     public User(Email email, Password password, String name, NickName nickName, UserRole userRole, UserStatus userStatus) {
         this.email = email;
@@ -76,5 +79,13 @@ public class User extends BaseEntity {
 
     public boolean isAdmin() {
         return UserRole.ADMIN.equals(this.userRole);
+    }
+
+    public void signUp() {
+        this.lastLogin = getCreatedTime();
+    }
+
+    public void login() {
+        this.lastLogin = LocalDateTime.now();
     }
 }
