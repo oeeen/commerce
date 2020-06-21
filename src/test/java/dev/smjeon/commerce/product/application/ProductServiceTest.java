@@ -89,6 +89,8 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithAnonymousUser
+    @DisplayName("권한 없이 모든 상품을 조회할 수 있습니다.")
     void findAll() {
         List<Product> products = Collections.singletonList(product);
         given(productRepository.findAll()).willReturn(products);
@@ -99,6 +101,8 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithAnonymousUser
+    @DisplayName("권한 없이 카테고리별 상품을 조회할 수 있습니다.")
     void findByCategory() {
         List<Product> products = Collections.singletonList(product);
 
@@ -112,6 +116,8 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithAnonymousUser
+    @DisplayName("권한 없이 모든 이벤트 상품을 조회할 수 있습니다.")
     void findAllEventProduct() {
         List<Product> products = Collections.singletonList(product);
         given(productRepository.findAllByType(any(ProductType.class))).willReturn(products);
