@@ -191,4 +191,18 @@ public class ProductApiTest extends TestTemplate {
                 .jsonPath("$.price").isEqualTo(200_000)
                 .jsonPath("$.shippingFee").isEqualTo(5_000);
     }
+
+    @Test
+    @DisplayName("REMOVED 상태의 상품은 조회되지 않습니다.")
+    void readRemovedProduct() {
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, requestBeforeUpdate);
+
+        loginAndRequest(HttpMethod.DELETE, "/api/products/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()));
+
+        loginAndRequest(HttpMethod.GET, "/api/products/" + response.getId(), Void.class, HttpStatus.FOUND,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+    }
 }

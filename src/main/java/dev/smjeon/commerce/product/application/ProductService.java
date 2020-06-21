@@ -84,6 +84,7 @@ public class ProductService {
         return ProductConverter.toDto(product);
     }
 
+    @Transactional
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundProductException(productId));
         User owner = getUserFromAuthentication();
