@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProductTest {
     private TopCategory topCategory;
@@ -94,5 +96,27 @@ public class ProductTest {
         product.block();
 
         assertEquals(product.getStatus(), ProductStatus.BLOCKED);
+    }
+
+    @Test
+    @DisplayName("ProductStatus가 ACTIVE가 아니면 false")
+    void isViewable() {
+        Product product = new Product(
+                topCategory,
+                productName,
+                productType,
+                price,
+                shippingFee,
+                owner,
+                ProductStatus.ACTIVE
+        );
+
+        assertTrue((product.isViewable()));
+
+        product.remove(owner);
+        assertFalse(product.isViewable());
+
+        product.block();
+        assertFalse(product.isViewable());
     }
 }
