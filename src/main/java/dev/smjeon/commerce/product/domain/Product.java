@@ -111,4 +111,8 @@ public class Product extends BaseEntity {
     public void block() {
         this.status = ProductStatus.BLOCKED;
     }
+
+    public boolean isViewable() {
+        return ProductStatus.ACTIVE.equals(this.status);
+    }
 }

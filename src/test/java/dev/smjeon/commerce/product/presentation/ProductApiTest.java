@@ -60,7 +60,7 @@ public class ProductApiTest extends TestTemplate {
     @Test
     @DisplayName("권한 없이 이벤트 상품 리스트를 조회합니다.")
     void findEventProducts() {
-        respondApi(request(HttpMethod.GET, "/api/products/event", Void.class, HttpStatus.OK))
+        respondApi(request(HttpMethod.GET, "/api/products/type/event", Void.class, HttpStatus.OK))
                 .jsonPath("$.[0].brandName").isEqualTo("이벤트")
                 .jsonPath("$.[0].productName").isEqualTo("헤드셋")
                 .jsonPath("$.[0].topCategory").isEqualTo("컴퓨터")
@@ -170,5 +170,25 @@ public class ProductApiTest extends TestTemplate {
                 .expectBody(ProductResponse.class)
                 .returnResult()
                 .getResponseBody();
+    }
+
+
+    @Test
+    @DisplayName("Product ID로 특정 상품을 누구든지 조회 가능합니다.(ProductStatus = ACTIVE)")
+    void readSpecificProduct() {
+        ProductName productName = new ProductName("특정 브랜드", "특정 상품");
+        ProductType productType = ProductType.NORMAL;
+        Price price = new Price(200_000);
+        ShippingFee shippingFee = new ShippingFee(5_000);
+        ProductRequest productRequest = new ProductRequest(productName, productType, price, shippingFee);
+
+        ProductResponse response = createProductsFromProductRequest(sellerLoginRequest, productRequest);
+
+        respondApi(loginAndRequest(HttpMethod.GET, "/api/products/" + response.getId(), Void.class, HttpStatus.OK,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword())))
+                .jsonPath("$.brandName").isEqualTo("특정 브랜드")
+                .jsonPath("$.productName").isEqualTo("특정 상품")
+                .jsonPath("$.price").isEqualTo(200_000)
+                .jsonPath("$.shippingFee").isEqualTo(5_000);
     }
 }
