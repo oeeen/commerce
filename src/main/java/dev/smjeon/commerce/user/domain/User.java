@@ -81,11 +81,7 @@ public class User extends BaseEntity {
         return UserRole.ADMIN.equals(this.userRole);
     }
 
-    public void signUp() {
-        this.lastLogin = getCreatedTime().toLocalDate();
-    }
-
-    public void login() {
+    public void signUpOrLogin() {
         this.lastLogin = LocalDateTime.now().toLocalDate();
     }
 }

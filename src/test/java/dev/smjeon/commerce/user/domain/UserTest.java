@@ -84,7 +84,7 @@ public class UserTest {
     void login() {
         User user = new User(email, password, name, nickName, UserRole.SELLER, UserStatus.ACTIVE);
 
-        user.login();
+        user.signUpOrLogin();
         assertEquals(user.getLastLogin(), LocalDate.now());
     }
 }

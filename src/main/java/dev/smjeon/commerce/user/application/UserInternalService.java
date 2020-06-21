@@ -77,7 +77,7 @@ public class UserInternalService {
 
         User user = new User(userSignUpRequest.getEmail(), new Password(encodedPassword),
                 userSignUpRequest.getUserName(), userSignUpRequest.getNickName(), UserRole.BUYER, UserStatus.ACTIVE);
-        user.signUp();
+        user.signUpOrLogin();
 
         userRepository.save(user);
 
@@ -95,7 +95,7 @@ public class UserInternalService {
                 .orElseThrow(() -> new NotFoundUserException(userLoginRequest.getEmail().getEmail()));
 
         if (isCorrectPassword(userLoginRequest.getPassword(), user)) {
-            user.login();
+            user.signUpOrLogin();
             return user;
         }
 
