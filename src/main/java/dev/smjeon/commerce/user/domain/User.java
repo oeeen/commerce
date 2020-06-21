@@ -42,7 +42,7 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
 
-    private LocalDateTime lastLogin;
+    private LocalDate lastLogin;
 
     public User(Email email, Password password, String name, NickName nickName, UserRole userRole, UserStatus userStatus) {
         this.email = email;
@@ -82,10 +82,10 @@ public class User extends BaseEntity {
     }
 
     public void signUp() {
-        this.lastLogin = getCreatedTime();
+        this.lastLogin = getCreatedTime().toLocalDate();
     }
 
     public void login() {
-        this.lastLogin = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now().toLocalDate();
     }
 }
