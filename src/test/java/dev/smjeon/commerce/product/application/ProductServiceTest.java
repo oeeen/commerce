@@ -2,6 +2,7 @@ package dev.smjeon.commerce.product.application;
 
 import dev.smjeon.commerce.category.application.CategoryInternalService;
 import dev.smjeon.commerce.category.domain.TopCategory;
+import dev.smjeon.commerce.common.WithMockCustomUser;
 import dev.smjeon.commerce.product.domain.Price;
 import dev.smjeon.commerce.product.domain.Product;
 import dev.smjeon.commerce.product.domain.ProductName;
@@ -11,8 +12,6 @@ import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
 import dev.smjeon.commerce.product.repository.ProductRepository;
-import dev.smjeon.commerce.security.UserContext;
-import dev.smjeon.commerce.security.token.PostAuthorizationToken;
 import dev.smjeon.commerce.user.application.UserInternalService;
 import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.NickName;
@@ -27,9 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -125,11 +121,11 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithMockCustomUser(role = UserRole.SELLER)
     @DisplayName("본인의 상품이면 수정이 됩니다.")
     void updateWithOwner() {
         ProductName productName = new ProductName("브랜드", "상품명");
         ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
-        initSecurityContext(UserRole.SELLER);
 
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
         given(userService.findById(anyLong())).willReturn(owner);
@@ -144,11 +140,11 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithMockCustomUser(role = UserRole.SELLER)
     @DisplayName("본인의 상품이 아니면 수정이 불가능합니다.")
     void updateWithoutOwner() {
         ProductName productName = new ProductName("브랜드", "상품명");
         ProductRequest request = new ProductRequest(productName, ProductType.NORMAL, new Price(100_000), new ShippingFee(3_000));
-        initSecurityContext(UserRole.SELLER);
 
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
         given(userService.findById(anyLong())).willReturn(other);
@@ -159,10 +155,9 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithMockCustomUser(role = UserRole.SELLER)
     @DisplayName("본인의 상품이면 삭제가 됩니다.(ProductStatus = REMOVED)")
     void deleteWithOwner() {
-        initSecurityContext(UserRole.SELLER);
-
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
         given(userService.findById(anyLong())).willReturn(owner);
 
@@ -173,10 +168,9 @@ class ProductServiceTest {
     }
 
     @Test
+    @WithMockCustomUser(role = UserRole.ADMIN)
     @DisplayName("관리자가 삭제요청을 하면 Blocked 상태로 변경됩니다.")
     void deleteWithAdmin() {
-        initSecurityContext(UserRole.ADMIN);
-
         given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
         given(userService.findById(anyLong())).willReturn(admin);
 
@@ -184,14 +178,5 @@ class ProductServiceTest {
 
         verify(productRepository).findById(1L);
         assertEquals(product.getStatus(), ProductStatus.BLOCKED);
-    }
-
-    private void initSecurityContext(UserRole userRole) {
-        UserContext userContext = new UserContext(1L, "ABCD", "Seongmo", userRole);
-
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        PostAuthorizationToken token = new PostAuthorizationToken(userContext);
-        securityContext.setAuthentication(token);
-        TestSecurityContextHolder.setContext(securityContext);
     }
 }
