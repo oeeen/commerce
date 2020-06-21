@@ -11,6 +11,7 @@ import dev.smjeon.commerce.product.domain.ProductType;
 import dev.smjeon.commerce.product.domain.ShippingFee;
 import dev.smjeon.commerce.product.dto.ProductRequest;
 import dev.smjeon.commerce.product.dto.ProductResponse;
+import dev.smjeon.commerce.product.exception.NotViewableProductException;
 import dev.smjeon.commerce.product.repository.ProductRepository;
 import dev.smjeon.commerce.user.application.UserInternalService;
 import dev.smjeon.commerce.user.domain.Email;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -178,5 +180,36 @@ class ProductServiceTest {
 
         verify(productRepository).findById(1L);
         assertEquals(product.getStatus(), ProductStatus.BLOCKED);
+    }
+
+    @Test
+    @WithAnonymousUser
+    @DisplayName("상품 Id로 조회가 가능합니다.")
+    void findById() {
+        given(productRepository.findById(anyLong())).willReturn(Optional.ofNullable(product));
+
+        productService.findById(1L);
+
+        verify(productRepository).findById(1L);
+    }
+
+    @Test
+    @WithAnonymousUser
+    @DisplayName("REMOVED 상태의 상품을 조회 시도 시 NotViewableProductException이 발생합니다.")
+    void findByIdRemovedProduct() {
+        Product removed = new Product(
+                category,
+                new ProductName("삭제 브랜드", "삭제 상품"),
+                ProductType.NORMAL,
+                new Price(100_000),
+                new ShippingFee(3_000),
+                owner,
+                ProductStatus.REMOVED
+        );
+
+        given(productRepository.findById(anyLong())).willReturn(Optional.of(removed));
+
+        assertThrows(NotViewableProductException.class, () -> productService.findById(1L));
+        verify(productRepository).findById(1L);
     }
 }
