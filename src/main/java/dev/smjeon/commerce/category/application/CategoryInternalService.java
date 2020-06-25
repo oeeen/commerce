@@ -35,7 +35,21 @@ public class CategoryInternalService {
     public TopCategory create(CategoryRequest categoryRequest) {
         TopCategory requestedCategory = createTopCategory(categoryRequest);
 
+        checkDuplicate(requestedCategory, categoryRequest);
+
+        return categoryRepository.save(requestedCategory);
+    }
+
+    private TopCategory createTopCategory(CategoryRequest categoryRequest) {
+        LowestCategory lowestCategory = new LowestCategory(new CategoryName(categoryRequest.getLowestCategory()));
+        SubCategory subCategory = new SubCategory(new CategoryName(categoryRequest.getSubCategory()), lowestCategory);
+
+        return new TopCategory(new CategoryName(categoryRequest.getTopCategory()), subCategory);
+    }
+
+    private void checkDuplicate(TopCategory requestedCategory, CategoryRequest categoryRequest) {
         CategoryName topCategoryName = new CategoryName(categoryRequest.getTopCategory());
+
         Optional<TopCategory> topCategory = categoryRepository.findByName(topCategoryName).stream()
                 .filter(category -> category.isSameCategory(requestedCategory))
                 .findAny();
@@ -47,14 +61,14 @@ public class CategoryInternalService {
                             requestedCategory.getLowestCategoryValue()
             );
         }
-
-        return categoryRepository.save(requestedCategory);
     }
 
-    private TopCategory createTopCategory(CategoryRequest categoryRequest) {
-        LowestCategory lowestCategory = new LowestCategory(new CategoryName(categoryRequest.getLowestCategory()));
-        SubCategory subCategory = new SubCategory(new CategoryName(categoryRequest.getSubCategory()), lowestCategory);
+    public TopCategory update(Long categoryId, CategoryRequest categoryRequest) {
+        TopCategory foundCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundCategoryException(categoryId));
+        TopCategory requestedCategory = createTopCategory(categoryRequest);
 
-        return new TopCategory(new CategoryName(categoryRequest.getTopCategory()), subCategory);
+        checkDuplicate(requestedCategory, categoryRequest);
+
+        return foundCategory.update(requestedCategory);
     }
 }

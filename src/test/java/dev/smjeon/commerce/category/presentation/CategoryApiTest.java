@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.category.presentation;
 
 import dev.smjeon.commerce.category.dto.CategoryRequest;
+import dev.smjeon.commerce.category.dto.CategoryResponse;
 import dev.smjeon.commerce.common.TestTemplate;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,5 +76,64 @@ public class CategoryApiTest extends TestTemplate {
                 .jsonPath("$.topCategory").isEqualTo(topCategory)
                 .jsonPath("$.subCategory").isEqualTo(subCategory)
                 .jsonPath("$.lowestCategory").isEqualTo(lowestCategory);
+    }
+
+    @Test
+    @DisplayName("관리자 권한으로 카테고리 수정이 가능합니다.")
+    void updateCategory() {
+        String lowestCategory = "수정 전 카테고리1";
+        String subCategory = "수정 전 카테고리2";
+        String topCategory = "수정 전 카테고리3";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+        CategoryResponse response = createCategoryFromRequest(categoryRequest);
+
+        lowestCategory = "수정 후 카테고리1";
+        subCategory = "수정 후 카테고리2";
+        topCategory = "수정 후 카테고리3";
+        CategoryRequest updateRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        respondApi(loginAndRequest(HttpMethod.PUT, "/api/categories/" + response.getId(), updateRequest, HttpStatus.OK,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())))
+                .jsonPath("$.topCategory").isEqualTo("수정 후 카테고리3")
+                .jsonPath("$.subCategory").isEqualTo("수정 후 카테고리2")
+                .jsonPath("$.lowestCategory").isEqualTo("수정 후 카테고리1");
+    }
+
+    @Test
+    @DisplayName("이미 존재하는 카테고리로 수정하려고 하면 Access Denied 됩니다.")
+    void updateDuplicatedCategory() {
+        String lowestCategory = "쌀";
+        String subCategory = "신선식품";
+        String topCategory = "식품";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        loginAndRequest(HttpMethod.PUT, "/api/categories/1", categoryRequest, HttpStatus.FOUND,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+
+    }
+
+    @Test
+    @DisplayName("관리자가 아닌 사용자는 카테고리 수정이 불가능합니다.")
+    void updateCategoryWithInsufficientAuthority() {
+        String lowestCategory = "판매자 카테고리";
+        String subCategory = "판매자";
+        String topCategory = "최상위 판매자 카테고리";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.FOUND,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+
+    }
+
+    private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
+        return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectBody(CategoryResponse.class)
+                .returnResult()
+                .getResponseBody();
     }
 }

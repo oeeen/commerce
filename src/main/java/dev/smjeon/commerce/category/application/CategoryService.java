@@ -32,4 +32,8 @@ public class CategoryService {
     public CategoryResponse create(CategoryRequest categoryRequest) {
         return CategoryConverter.toDto(categoryInternalService.create(categoryRequest));
     }
+
+    public CategoryResponse update(Long categoryId, CategoryRequest categoryRequest) {
+        return CategoryConverter.toDto(categoryInternalService.update(categoryId, categoryRequest));
+    }
 }

@@ -44,4 +44,10 @@ public class TopCategory extends BaseEntity {
     public boolean isSameCategory(TopCategory topCategory) {
         return this.name.equals(topCategory.getName()) && this.subCategory.equals(topCategory.getSubCategory());
     }
+
+    public TopCategory update(TopCategory requestedCategory) {
+        this.name = requestedCategory.name;
+        this.subCategory = requestedCategory.subCategory;
+        return this;
+    }
 }
