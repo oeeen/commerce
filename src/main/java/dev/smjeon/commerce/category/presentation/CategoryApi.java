@@ -5,7 +5,9 @@ import dev.smjeon.commerce.category.dto.CategoryRequest;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +33,11 @@ public class CategoryApi {
     public ResponseEntity<CategoryResponse> create(@RequestBody CategoryRequest categoryRequest) {
         CategoryResponse response = categoryService.create(categoryRequest);
         return ResponseEntity.created(URI.create("/api/categories/" + response.getId())).body(response);
+    }
+
+    @PutMapping("{categoryId}")
+    public ResponseEntity<CategoryResponse> update(@PathVariable Long categoryId,
+                                                   @RequestBody CategoryRequest categoryRequest) {
+        return ResponseEntity.ok(categoryService.update(categoryId, categoryRequest));
     }
 }

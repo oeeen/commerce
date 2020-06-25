@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.category.presentation;
 
 import dev.smjeon.commerce.category.dto.CategoryRequest;
+import dev.smjeon.commerce.category.dto.CategoryResponse;
 import dev.smjeon.commerce.common.TestTemplate;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,5 +76,34 @@ public class CategoryApiTest extends TestTemplate {
                 .jsonPath("$.topCategory").isEqualTo(topCategory)
                 .jsonPath("$.subCategory").isEqualTo(subCategory)
                 .jsonPath("$.lowestCategory").isEqualTo(lowestCategory);
+    }
+
+    @Test
+    @DisplayName("관리자 권한으로 카테고리 수정이 가능합니다.")
+    void updateCategory() {
+        String lowestCategory = "수정 전 카테고리1";
+        String subCategory = "수정 전 카테고리2";
+        String topCategory = "수정 전 카테고리3";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+        CategoryResponse response = createCategoryFromRequest(categoryRequest);
+
+        lowestCategory = "수정 후 카테고리1";
+        subCategory = "수정 후 카테고리2";
+        topCategory = "수정 후 카테고리3";
+        CategoryRequest updateRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        respondApi(loginAndRequest(HttpMethod.PUT, "/api/categories/" + response.getId(), updateRequest, HttpStatus.OK,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())))
+                .jsonPath("$.topCategory").isEqualTo("수정 후 카테고리3")
+                .jsonPath("$.subCategory").isEqualTo("수정 후 카테고리2")
+                .jsonPath("$.lowestCategory").isEqualTo("수정 후 카테고리1");
+    }
+
+    private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
+        return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectBody(CategoryResponse.class)
+                .returnResult()
+                .getResponseBody();
     }
 }
