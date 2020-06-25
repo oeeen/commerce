@@ -71,4 +71,10 @@ public class CategoryInternalService {
 
         return foundCategory.update(requestedCategory);
     }
+
+    public void delete(Long categoryId) {
+        TopCategory category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundCategoryException(categoryId));
+
+        categoryRepository.delete(category);
+    }
 }
