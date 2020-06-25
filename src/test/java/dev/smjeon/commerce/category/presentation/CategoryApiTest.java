@@ -139,6 +139,18 @@ public class CategoryApiTest extends TestTemplate {
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()));
     }
 
+    @Test
+    @DisplayName("관리자가 아닌 사용자는 카테고리를 삭제할 수 없습니다.")
+    void deleteCategoryWithInsufficientAuthority() {
+        CategoryRequest request = new CategoryRequest("삭제 못하는", "카테", "고리");
+        CategoryResponse response = createCategoryFromRequest(request);
+
+        loginAndRequest(HttpMethod.DELETE, "/api/categories/" + response.getId(), Void.class, HttpStatus.FOUND,
+                loginSessionId(buyerLoginRequest.getEmail(), buyerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+    }
+
     private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
         return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
