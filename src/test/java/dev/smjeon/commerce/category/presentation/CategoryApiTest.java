@@ -114,6 +114,21 @@ public class CategoryApiTest extends TestTemplate {
 
     }
 
+    @Test
+    @DisplayName("관리자가 아닌 사용자는 카테고리 수정이 불가능합니다.")
+    void updateCategoryWithInsufficientAuthority() {
+        String lowestCategory = "판매자 카테고리";
+        String subCategory = "판매자";
+        String topCategory = "최상위 판매자 카테고리";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.FOUND,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+
+    }
+
     private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
         return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
