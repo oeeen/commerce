@@ -116,4 +116,25 @@ class CategoryInternalServiceTest {
         verify(categoryRepository).findById(1L);
         verify(categoryRepository, times(0)).findByName(new CategoryName(request.getTopCategory()));
     }
+
+    @Test
+    @DisplayName("존재하는 카테고리 삭제 성공")
+    void deleteCategory() {
+        given(categoryRepository.findById(1L)).willReturn(Optional.of(topCategory));
+
+        categoryInternalService.delete(1L);
+
+        verify(categoryRepository).findById(1L);
+        verify(categoryRepository).delete(topCategory);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 카테고리 삭제 시 NotFoundCategoryException")
+    void deleteNotFoundCategory() {
+        given(categoryRepository.findById(1L)).willReturn(Optional.empty());
+
+        assertThrows(NotFoundCategoryException.class, () -> categoryInternalService.delete(1L));
+
+        verify(categoryRepository, times(0)).delete(any(TopCategory.class));
+    }
 }
