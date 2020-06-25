@@ -99,6 +99,21 @@ public class CategoryApiTest extends TestTemplate {
                 .jsonPath("$.lowestCategory").isEqualTo("수정 후 카테고리1");
     }
 
+    @Test
+    @DisplayName("이미 존재하는 카테고리로 수정하려고 하면 Access Denied 됩니다.")
+    void updateDuplicatedCategory() {
+        String lowestCategory = "쌀";
+        String subCategory = "신선식품";
+        String topCategory = "식품";
+        CategoryRequest categoryRequest = new CategoryRequest(topCategory, subCategory, lowestCategory);
+
+        loginAndRequest(HttpMethod.PUT, "/api/categories/1", categoryRequest, HttpStatus.FOUND,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+
+    }
+
     private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
         return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
