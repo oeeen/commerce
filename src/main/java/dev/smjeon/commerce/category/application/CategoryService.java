@@ -36,4 +36,8 @@ public class CategoryService {
     public CategoryResponse update(Long categoryId, CategoryRequest categoryRequest) {
         return CategoryConverter.toDto(categoryInternalService.update(categoryId, categoryRequest));
     }
+
+    public void delete(Long categoryId) {
+        categoryInternalService.delete(categoryId);
+    }
 }

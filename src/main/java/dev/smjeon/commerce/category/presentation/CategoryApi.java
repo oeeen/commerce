@@ -4,6 +4,7 @@ import dev.smjeon.commerce.category.application.CategoryService;
 import dev.smjeon.commerce.category.dto.CategoryRequest;
 import dev.smjeon.commerce.category.dto.CategoryResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,9 +36,16 @@ public class CategoryApi {
         return ResponseEntity.created(URI.create("/api/categories/" + response.getId())).body(response);
     }
 
-    @PutMapping("{categoryId}")
+    @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryResponse> update(@PathVariable Long categoryId,
                                                    @RequestBody CategoryRequest categoryRequest) {
         return ResponseEntity.ok(categoryService.update(categoryId, categoryRequest));
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> delete(@PathVariable Long categoryId) {
+        categoryService.delete(categoryId);
+
+        return ResponseEntity.noContent().build();
     }
 }

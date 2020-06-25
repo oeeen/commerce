@@ -129,6 +129,16 @@ public class CategoryApiTest extends TestTemplate {
 
     }
 
+    @Test
+    @DisplayName("관리자 권한으로 카테고리를 삭제할 수 있습니다.")
+    void deleteCategory() {
+        CategoryRequest request = new CategoryRequest("삭제할 카테고리", "삭제", "삭제할");
+        CategoryResponse response = createCategoryFromRequest(request);
+
+        loginAndRequest(HttpMethod.DELETE, "/api/categories/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()));
+    }
+
     private CategoryResponse createCategoryFromRequest(CategoryRequest categoryRequest) {
         return loginAndRequest(HttpMethod.POST, "/api/categories", categoryRequest, HttpStatus.CREATED,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
