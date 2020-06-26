@@ -118,4 +118,12 @@ public class UserInternalService {
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundUserException(id));
     }
+
+    public boolean isInactive(User user) {
+        return user.isInactive();
+    }
+
+    public boolean isDormant(User user) {
+        return user.isDormant();
+    }
 }

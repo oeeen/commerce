@@ -3,6 +3,8 @@ package dev.smjeon.commerce.security.handlers;
 import dev.smjeon.commerce.security.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -23,8 +25,10 @@ public class FormLoginAuthenticationFailureHandler extends SimpleUrlAuthenticati
             throws IOException, ServletException {
         String errorMessage = ERROR_MESSAGE;
 
-        if (exception instanceof UnauthorizedException) {
-            errorMessage = ERROR_MESSAGE;
+        if (exception instanceof UnauthorizedException ||
+                exception instanceof LockedException ||
+                exception instanceof DisabledException) {
+            errorMessage = exception.getMessage();
         }
 
         setDefaultFailureUrl("/login?error=true&exception=" + errorMessage);

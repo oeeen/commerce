@@ -84,4 +84,12 @@ public class User extends BaseEntity {
     public void signUpOrLogin() {
         this.lastLogin = LocalDateTime.now().toLocalDate();
     }
+
+    public boolean isInactive() {
+        return UserStatus.INACTIVE.equals(this.userStatus);
+    }
+
+    public boolean isDormant() {
+        return UserStatus.DORMANT.equals(this.userStatus);
+    }
 }

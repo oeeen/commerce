@@ -87,4 +87,16 @@ public class UserTest {
         user.signUpOrLogin();
         assertEquals(user.getLastLogin(), LocalDate.now());
     }
+
+    @Test
+    @DisplayName("현재 계정 상태를 INACTIVE, DORMANT인지 확인합니다.")
+    void userState() {
+        User inactiveUser = new User(email, password, name, nickName, UserRole.ADMIN, UserStatus.INACTIVE);
+
+        assertTrue(inactiveUser.isInactive());
+
+        User dormantUser = new User(email, password, name, nickName, UserRole.ADMIN, UserStatus.DORMANT);
+
+        assertTrue(dormantUser.isDormant());
+    }
 }

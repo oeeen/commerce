@@ -1,8 +1,6 @@
 package dev.smjeon.commerce.user.application;
 
-import dev.smjeon.commerce.security.UserContext;
 import dev.smjeon.commerce.user.converter.UserConverter;
-import dev.smjeon.commerce.user.domain.Email;
 import dev.smjeon.commerce.user.domain.User;
 import dev.smjeon.commerce.user.dto.UserLoginRequest;
 import dev.smjeon.commerce.user.dto.UserResponse;
@@ -26,10 +24,6 @@ public class UserService {
         return users.stream()
                 .map(UserConverter::toDto)
                 .collect(Collectors.toList());
-    }
-
-    public UserContext findByEmail(Email email) {
-        return userInternalService.findByEmail(email);
     }
 
     public UserResponse save(UserSignUpRequest userSignUpRequest) {
