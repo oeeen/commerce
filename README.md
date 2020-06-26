@@ -17,10 +17,11 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
 - H2, MySQL
 - thymeleaf
 
-## 현재 이슈 (2020/06/25)
+## 현재 이슈 (2020/06/26)
 
 - logging
 - CSRF protection
+- Exception 별 예외처리 (DisabledException, LockedException, BadCredentialException)
 
 ### 기능 구현 목록 (프로젝트 관리와 이슈 추가 하면서 업데이트)
 
