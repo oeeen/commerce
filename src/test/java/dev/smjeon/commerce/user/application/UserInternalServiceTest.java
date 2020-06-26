@@ -55,6 +55,8 @@ class UserInternalServiceTest {
     private Email email = new Email("oeeen3@gmail.com");
     private Password password = new Password("Aa12345!");
     private User user = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.ACTIVE);
+    private User inactive = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.INACTIVE);
+    private User dormant = new User(email, password, name, nickName, UserRole.BUYER, UserStatus.DORMANT);
 
     @Test
     void findAll() {
@@ -147,5 +149,15 @@ class UserInternalServiceTest {
     @Test
     void isActiveUser() {
         assertTrue(userInternalService.isActiveUser(user));
+    }
+
+    @Test
+    void isInactive() {
+        assertTrue(userInternalService.isInactive(inactive));
+    }
+
+    @Test
+    void isDormant() {
+        assertTrue(userInternalService.isDormant(dormant));
     }
 }
