@@ -24,10 +24,18 @@ public class Coupon extends BaseEntity {
 
     private Double rate;
 
-    public Coupon(String name, CouponCode code, CouponType type, Double rate) {
+    @Enumerated(value = EnumType.STRING)
+    private CouponStatus status;
+
+    public Coupon(String name, CouponCode code, CouponType type, Double rate, CouponStatus status) {
         this.name = name;
         this.code = code;
         this.type = type;
         this.rate = rate;
+        this.status = status;
+    }
+
+    public void expire() {
+        this.status = CouponStatus.EXPIRED;
     }
 }

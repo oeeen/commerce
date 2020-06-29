@@ -17,4 +17,8 @@ public class CouponService {
     public CouponResponse create(CouponRequest couponRequest) {
         return CouponConverter.toDto(couponInternalService.create(couponRequest));
     }
+
+    public void expire(Long couponId) {
+        couponInternalService.expire(couponId);
+    }
 }
