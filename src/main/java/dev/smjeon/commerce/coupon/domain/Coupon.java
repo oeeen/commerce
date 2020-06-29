@@ -24,8 +24,9 @@ public class Coupon extends BaseEntity {
 
     private Double rate;
 
-    public Coupon(String name, CouponType type, Double rate) {
+    public Coupon(String name, CouponCode code, CouponType type, Double rate) {
         this.name = name;
+        this.code = code;
         this.type = type;
         this.rate = rate;
     }
