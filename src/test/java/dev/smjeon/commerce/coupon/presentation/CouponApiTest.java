@@ -68,4 +68,21 @@ public class CouponApiTest extends TestTemplate {
         loginAndRequest(HttpMethod.DELETE, "/api/coupon/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()));
     }
+
+    @Test
+    @DisplayName("ADMIN 권한이 아니면 쿠폰을 만료시킬 수 없습니다. (access deny)")
+    void expireWithInsufficientAuthority() {
+        CouponRequest request = new CouponRequest("만료 못할 쿠폰", "새로운 쿠폰", CouponType.PRODUCT, 0.05D);
+
+        CouponResponse response = loginAndRequest(HttpMethod.POST, "/api/coupon", request, HttpStatus.CREATED,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectBody(CouponResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        loginAndRequest(HttpMethod.DELETE, "/api/coupon/" + response.getId(), Void.class, HttpStatus.FOUND,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
+    }
 }
