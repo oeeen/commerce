@@ -34,4 +34,8 @@ public class Coupon extends BaseEntity {
         this.rate = rate;
         this.status = status;
     }
+
+    public void expire() {
+        this.status = CouponStatus.EXPIRED;
+    }
 }

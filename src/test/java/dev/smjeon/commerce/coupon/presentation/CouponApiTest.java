@@ -3,6 +3,7 @@ package dev.smjeon.commerce.coupon.presentation;
 import dev.smjeon.commerce.common.TestTemplate;
 import dev.smjeon.commerce.coupon.domain.CouponType;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
+import dev.smjeon.commerce.coupon.dto.CouponResponse;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,5 +52,20 @@ public class CouponApiTest extends TestTemplate {
     private WebTestClient.BodyContentSpec create(CouponRequest request) {
         return respondApi(loginAndRequest(HttpMethod.POST, "/api/coupon", request, HttpStatus.CREATED,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())));
+    }
+
+    @Test
+    @DisplayName("ADMIN 권한으로 쿠폰을 만료시킬 수 있습니다.")
+    void expireCoupon() {
+        CouponRequest request = new CouponRequest("만료될 쿠폰", "곧 만료", CouponType.PRODUCT, 0.05D);
+
+        CouponResponse response = loginAndRequest(HttpMethod.POST, "/api/coupon", request, HttpStatus.CREATED,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()))
+                .expectBody(CouponResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        loginAndRequest(HttpMethod.DELETE, "/api/coupon/" + response.getId(), Void.class, HttpStatus.NO_CONTENT,
+                loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword()));
     }
 }

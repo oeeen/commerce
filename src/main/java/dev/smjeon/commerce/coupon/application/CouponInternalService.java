@@ -5,6 +5,7 @@ import dev.smjeon.commerce.coupon.domain.CouponCode;
 import dev.smjeon.commerce.coupon.domain.CouponStatus;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
 import dev.smjeon.commerce.coupon.exception.DuplicatedCouponException;
+import dev.smjeon.commerce.coupon.exception.NotFoundCouponException;
 import dev.smjeon.commerce.coupon.repository.CouponRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +35,10 @@ public class CouponInternalService {
         );
 
         return couponRepository.save(coupon);
+    }
+
+    public void expire(Long couponId) {
+        Coupon requestedCoupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundCouponException(couponId));
+        requestedCoupon.expire();
     }
 }
