@@ -3,9 +3,11 @@ package dev.smjeon.commerce.coupon.application;
 import dev.smjeon.commerce.common.WithMockCustomUser;
 import dev.smjeon.commerce.coupon.domain.Coupon;
 import dev.smjeon.commerce.coupon.domain.CouponCode;
+import dev.smjeon.commerce.coupon.domain.CouponStatus;
 import dev.smjeon.commerce.coupon.domain.CouponType;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
 import dev.smjeon.commerce.coupon.exception.DuplicatedCouponException;
+import dev.smjeon.commerce.coupon.exception.NotFoundCouponException;
 import dev.smjeon.commerce.coupon.repository.CouponRepository;
 import dev.smjeon.commerce.user.domain.UserRole;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -56,5 +59,35 @@ class CouponInternalServiceTest {
         assertThrows(DuplicatedCouponException.class, () -> couponInternalService.create(request));
 
         verify(couponRepository).findByCode(new CouponCode("CODE"));
+    }
+
+    @Test
+    @WithMockCustomUser(role = UserRole.ADMIN)
+    @DisplayName("쿠폰을 만료시키면 상태가 EXPIRED로 변경됩니다.")
+    void expire() {
+        Coupon requestedCoupon = new Coupon(
+                "쿠폰",
+                new CouponCode("Code"),
+                CouponType.BASKET,
+                0.5,
+                CouponStatus.NORMAL
+        );
+        given(couponRepository.findById(1L)).willReturn(Optional.of(requestedCoupon));
+
+
+        assertEquals(requestedCoupon.getStatus(), CouponStatus.NORMAL);
+        couponInternalService.expire(1L);
+        assertEquals(requestedCoupon.getStatus(), CouponStatus.EXPIRED);
+        verify(couponRepository).findById(1L);
+    }
+
+    @Test
+    @WithMockCustomUser(role = UserRole.ADMIN)
+    @DisplayName("존재하지 않는 쿠폰일 경우 NotFoundCouponException이 발생합니다.")
+    void expireNotFoundCouponId() {
+        given(couponRepository.findById(1L)).willReturn(Optional.empty());
+
+        assertThrows(NotFoundCouponException.class, () -> couponInternalService.expire(1L));
+        verify(couponRepository).findById(1L);
     }
 }
