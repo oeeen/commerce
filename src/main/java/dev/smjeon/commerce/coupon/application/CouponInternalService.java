@@ -2,6 +2,7 @@ package dev.smjeon.commerce.coupon.application;
 
 import dev.smjeon.commerce.coupon.domain.Coupon;
 import dev.smjeon.commerce.coupon.domain.CouponCode;
+import dev.smjeon.commerce.coupon.domain.CouponStatus;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
 import dev.smjeon.commerce.coupon.exception.DuplicatedCouponException;
 import dev.smjeon.commerce.coupon.repository.CouponRepository;
@@ -28,7 +29,8 @@ public class CouponInternalService {
                 couponRequest.getCouponName(),
                 new CouponCode(couponRequest.getCode()),
                 couponRequest.getType(),
-                couponRequest.getRate()
+                couponRequest.getRate(),
+                CouponStatus.NORMAL
         );
 
         return couponRepository.save(coupon);
