@@ -2,7 +2,9 @@ package dev.smjeon.commerce;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @SpringBootApplication
 public class CommerceApplication {
 	private static final String OAUTH = "spring.config.location=classpath:oauth.yml";
