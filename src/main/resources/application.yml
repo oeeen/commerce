@@ -26,10 +26,13 @@ spring:
         show_sql: true
         use_sql_comments: true
 
+logging:
+  config: "classpath:logback-dev.xml"
+
 ---
 
 spring:
-  profiles: deploy
+  profiles: prod
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     password: 11111111
@@ -50,3 +53,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect
         format_sql: true
     show-sql: true
+
+logging:
+  config: "classpath:logback-prod.xml"
