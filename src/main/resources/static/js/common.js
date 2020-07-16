@@ -5,20 +5,28 @@ const Api = {
         });
     },
     post: function (url, data) {
+        const token = document.getElementById("_csrf").getAttribute("content");
+        const header = document.getElementById("_csrf_header").getAttribute("content");
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append(header, token);
+
         return fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: headers,
             body: JSON.stringify(data),
         });
     },
     put: function (url, data) {
+        const token = document.getElementById("_csrf").getAttribute("content");
+        const header = document.getElementById("_csrf_header").getAttribute("content");
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append(header, token);
+
         return fetch(url, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: headers,
             body: JSON.stringify(data),
         });
     },

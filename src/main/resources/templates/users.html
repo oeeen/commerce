@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <!--  This file has been downloaded from https://bootdey.com  -->
     <!--  All snippets are MIT license https://bootdey.com/license -->
     <title>SMJ-Commerce</title>
