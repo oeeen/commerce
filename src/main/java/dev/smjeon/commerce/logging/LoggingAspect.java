@@ -27,9 +27,9 @@ public class LoggingAspect {
 
     @Around("(restController() || controller()) && onMethod()")
     public Object doLogging(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        logger.debug("{}, Arguments : {}", proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs());
+        logger.info("{}, Arguments : {}", proceedingJoinPoint.getSignature(), proceedingJoinPoint.getArgs());
         Object retVal = proceedingJoinPoint.proceed();
-        logger.debug("{}, Return Value : {}", proceedingJoinPoint.getSignature(), retVal);
+        logger.info("{}, Return Value : {}", proceedingJoinPoint.getSignature(), retVal);
         return retVal;
     }
 }
