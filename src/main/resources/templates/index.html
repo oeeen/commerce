@@ -7,8 +7,8 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
   <title>SMJ-Commerce</title>
   <link href="/css/bootstrap.min.css" rel="stylesheet">
