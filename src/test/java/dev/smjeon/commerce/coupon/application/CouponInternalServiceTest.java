@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -89,5 +90,15 @@ class CouponInternalServiceTest {
 
         assertThrows(NotFoundCouponException.class, () -> couponInternalService.expire(1L));
         verify(couponRepository).findById(1L);
+    }
+
+    @Test
+    @DisplayName("15자의 쿠폰코드를 생성합니다.")
+    void createCouponCode() {
+        given(couponRepository.findByCode(any(CouponCode.class))).willReturn(Optional.empty());
+
+        String code = couponInternalService.createRandomCode();
+
+        assertEquals(15, code.length());
     }
 }
