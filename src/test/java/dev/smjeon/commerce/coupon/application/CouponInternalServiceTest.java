@@ -21,11 +21,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 class CouponInternalServiceTest {
+
+    private static final String CODE = "ABCDE12345ABCDE";
 
     @InjectMocks
     private CouponInternalService couponInternalService;
@@ -40,25 +43,25 @@ class CouponInternalServiceTest {
     @WithMockCustomUser(role = UserRole.ADMIN)
     @DisplayName("쿠폰 코드가 중복이 아닐 경우 정상 생성")
     void create() {
-        given(couponRepository.findByCode(new CouponCode("CODE"))).willReturn(Optional.empty());
+        given(couponRepository.findByCode(new CouponCode(CODE))).willReturn(Optional.empty());
 
 
-        CouponRequest couponRequest = new CouponRequest("이름", "CODE", CouponType.BASKET, 0.5);
+        CouponRequest couponRequest = new CouponRequest("이름", CODE, CouponType.BASKET, 0.5);
         couponInternalService.create(couponRequest);
 
-        verify(couponRepository).findByCode(new CouponCode("CODE"));
+        verify(couponRepository).findByCode(new CouponCode(CODE));
     }
 
     @Test
     @WithMockCustomUser(role = UserRole.ADMIN)
     @DisplayName("쿠폰 코드가 중복일 경우 DuplicatedCouponException 발생")
     void createDuplicated() {
-        given(couponRepository.findByCode(new CouponCode("CODE"))).willReturn(Optional.of(coupon));
+        given(couponRepository.findByCode(new CouponCode(CODE))).willReturn(Optional.of(coupon));
 
-        CouponRequest request = new CouponRequest("쿠폰", "CODE", CouponType.BASKET, 0.5);
+        CouponRequest request = new CouponRequest("쿠폰", CODE, CouponType.BASKET, 0.5);
         assertThrows(DuplicatedCouponException.class, () -> couponInternalService.create(request));
 
-        verify(couponRepository).findByCode(new CouponCode("CODE"));
+        verify(couponRepository).findByCode(new CouponCode(CODE));
     }
 
     @Test
@@ -67,7 +70,7 @@ class CouponInternalServiceTest {
     void expire() {
         Coupon requestedCoupon = new Coupon(
                 "쿠폰",
-                new CouponCode("Code"),
+                new CouponCode(CODE),
                 CouponType.BASKET,
                 0.5,
                 CouponStatus.NORMAL
@@ -89,5 +92,15 @@ class CouponInternalServiceTest {
 
         assertThrows(NotFoundCouponException.class, () -> couponInternalService.expire(1L));
         verify(couponRepository).findById(1L);
+    }
+
+    @Test
+    @DisplayName("15자의 쿠폰코드를 생성합니다.")
+    void createCouponCode() {
+        given(couponRepository.findByCode(any(CouponCode.class))).willReturn(Optional.empty());
+
+        String code = couponInternalService.createRandomCode();
+
+        assertEquals(15, code.length());
     }
 }

@@ -27,6 +27,7 @@ public class SecurityResourceService {
         resources.put(new AntPathRequestMatcher("/api/categories/*", HttpMethod.PUT.name()), Collections.singletonList(new SecurityConfig(UserRole.ADMIN.getRoleName())));
         resources.put(new AntPathRequestMatcher("/api/categories/*", HttpMethod.DELETE.name()), Collections.singletonList(new SecurityConfig(UserRole.ADMIN.getRoleName())));
         resources.put(new AntPathRequestMatcher("/api/coupon", HttpMethod.POST.name()), Collections.singletonList(new SecurityConfig(UserRole.ADMIN.getRoleName())));
+        resources.put(new AntPathRequestMatcher("/api/coupon/code", HttpMethod.GET.name()), Collections.singletonList(new SecurityConfig(UserRole.ADMIN.getRoleName())));
         resources.put(new AntPathRequestMatcher("/api/coupon/*", HttpMethod.DELETE.name()), Collections.singletonList(new SecurityConfig(UserRole.ADMIN.getRoleName())));
     }
 

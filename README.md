@@ -27,6 +27,7 @@ E-Commerce 를 개발하며 공부하는 저장소입니다.
     - SecurityConfig 내에서 csrf ignoring 제거하기 위함
 - Requested IP는 현재 필요 없어서 로깅하지 않았음
     - 해외 IP를 차단한다거나 관리할 필요가 생기면 추가
+- 랜덤 쿠폰 코드 생성 시 계~속 중복으로 발생하면 StackOverflow 발생할 수 있음 (재귀호출)
 
 ### 기능 구현 목록 (프로젝트 관리와 이슈 추가 하면서 업데이트)
 
