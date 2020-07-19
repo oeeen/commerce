@@ -1,10 +1,12 @@
 package dev.smjeon.commerce.coupon.presentation;
 
 import dev.smjeon.commerce.coupon.application.CouponService;
+import dev.smjeon.commerce.coupon.dto.CouponCodeResponse;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
 import dev.smjeon.commerce.coupon.dto.CouponResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,8 +31,8 @@ public class CouponApi {
         return ResponseEntity.created(URI.create("/api/coupon/" + response.getId())).body(response);
     }
 
-    @PostMapping("/code")
-    public ResponseEntity<String> createRandomCode() {
+    @GetMapping("/code")
+    public ResponseEntity<CouponCodeResponse> createRandomCode() {
         return ResponseEntity.ok(couponService.createRandomCode());
     }
 

@@ -1,6 +1,7 @@
 package dev.smjeon.commerce.coupon.application;
 
 import dev.smjeon.commerce.coupon.converter.CouponConverter;
+import dev.smjeon.commerce.coupon.dto.CouponCodeResponse;
 import dev.smjeon.commerce.coupon.dto.CouponRequest;
 import dev.smjeon.commerce.coupon.dto.CouponResponse;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CouponService {
         couponInternalService.expire(couponId);
     }
 
-    public String createRandomCode() {
-        return couponInternalService.createRandomCode();
+    public CouponCodeResponse createRandomCode() {
+        return new CouponCodeResponse(couponInternalService.createRandomCode());
     }
 }
