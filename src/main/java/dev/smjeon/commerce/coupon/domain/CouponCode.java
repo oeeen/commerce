@@ -13,10 +13,12 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class CouponCode {
 
+    private static final int CODE_LENGTH = 15;
+
     private String value;
 
     public CouponCode(String value) {
-        if (value.length() != 15) {
+        if (value.length() != CODE_LENGTH) {
             throw new CannotCreateCouponCodeException(value);
         }
         this.value = value;
