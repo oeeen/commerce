@@ -87,10 +87,19 @@ public class CouponApiTest extends TestTemplate {
     }
 
     @Test
-    @DisplayName("15자의 쿠폰 코드를 랜덤으로 받아옵니다.")
+    @DisplayName("ADMIN 권한으로 15자의 쿠폰 코드를 랜덤으로 받아옵니다.")
     void createRandomCode() {
         respondApi(loginAndRequest(HttpMethod.GET, "/api/coupon/code", Void.class, HttpStatus.OK,
                 loginSessionId(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())))
                 .jsonPath("$.code").value(Matchers.hasLength(15));
+    }
+
+    @Test
+    @DisplayName("ADMIN 권한이 아니면 15자의 쿠폰 코드를 받아올 수 없습니다.")
+    void createRandomCodeWithInsufficientAuthority() {
+        loginAndRequest(HttpMethod.GET, "/api/coupon/code", Void.class, HttpStatus.FOUND,
+                loginSessionId(sellerLoginRequest.getEmail(), sellerLoginRequest.getPassword()))
+                .expectHeader()
+                .value("Location", Matchers.containsString("/denied"));
     }
 }
