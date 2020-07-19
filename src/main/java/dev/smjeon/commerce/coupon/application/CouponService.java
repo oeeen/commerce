@@ -21,4 +21,8 @@ public class CouponService {
     public void expire(Long couponId) {
         couponInternalService.expire(couponId);
     }
+
+    public String createRandomCode() {
+        return couponInternalService.createRandomCode();
+    }
 }

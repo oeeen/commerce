@@ -10,9 +10,16 @@ import dev.smjeon.commerce.coupon.repository.CouponRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
+
 @Transactional
 @Service
 public class CouponInternalService {
+
+    private static final int ALPHABET_COUNT = 26;
+    private static final int NUMBER_COUNT = 10;
+    private static final char NUMBER_OFFSET = '0';
+    private static final char ALPHABET_OFFSET = 'A';
 
     private final CouponRepository couponRepository;
 
@@ -40,5 +47,33 @@ public class CouponInternalService {
     public void expire(Long couponId) {
         Coupon requestedCoupon = couponRepository.findById(couponId).orElseThrow(() -> new NotFoundCouponException(couponId));
         requestedCoupon.expire();
+    }
+
+    public String createRandomCode() {
+        String code = createRandomCodeInternal();
+        if (couponRepository.findByCode(new CouponCode(code)).isPresent()) {
+            return createRandomCode();
+        }
+
+        return code;
+    }
+
+    private String createRandomCodeInternal() {
+        StringBuffer stringBuffer = new StringBuffer();
+
+        for (int i = 0; i < 15; i++) {
+            stringBuffer.append(createRandomCharacter());
+        }
+        return stringBuffer.toString();
+    }
+
+    private char createRandomCharacter() {
+        Random random = new Random();
+
+        if (random.nextBoolean()) {
+            return (char) (random.nextInt(ALPHABET_COUNT) + ALPHABET_OFFSET);
+        }
+
+        return (char) (random.nextInt(NUMBER_COUNT) + NUMBER_OFFSET);
     }
 }

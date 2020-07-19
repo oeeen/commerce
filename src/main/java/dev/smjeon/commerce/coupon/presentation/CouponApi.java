@@ -29,6 +29,11 @@ public class CouponApi {
         return ResponseEntity.created(URI.create("/api/coupon/" + response.getId())).body(response);
     }
 
+    @PostMapping("/code")
+    public ResponseEntity<String> createRandomCode() {
+        return ResponseEntity.ok(couponService.createRandomCode());
+    }
+
     @DeleteMapping("/{couponId}")
     public ResponseEntity<Void> expire(@PathVariable Long couponId) {
         couponService.expire(couponId);
