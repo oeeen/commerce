@@ -20,6 +20,7 @@ public class CouponInternalService {
     private static final int NUMBER_COUNT = 10;
     private static final char NUMBER_OFFSET = '0';
     private static final char ALPHABET_OFFSET = 'A';
+    private static final int CODE_LENGTH = 15;
 
     private final CouponRepository couponRepository;
 
@@ -61,7 +62,7 @@ public class CouponInternalService {
     private String createRandomCodeInternal() {
         StringBuffer stringBuffer = new StringBuffer();
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < CODE_LENGTH; i++) {
             stringBuffer.append(createRandomCharacter());
         }
         return stringBuffer.toString();
